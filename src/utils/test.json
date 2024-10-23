@@ -1,0 +1,24 @@
+[
+  { "from": "jack", "to": "jack", "amount": 33.3 },
+  { "from": "mia", "to": "jack", "amount": 33.3 },
+  { "from": "boris", "to": "jack", "amount": 33.3 },
+  { "from": "mia", "to": "mia", "amount": 81.6 },
+  { "from": "jack", "to": "mia", "amount": 76.6 },
+  { "from": "boris", "to": "mia", "amount": 81.6 },
+  { "from": "boris", "to": "boris", "amount": 13 },
+  { "from": "jack", "to": "boris", "amount": 3 },
+  { "from": "mia", "to": "boris", "amount": 13 }
+],
+
+[
+    { "from": "jack", "to": "jack", "amount": 50 },
+    { "from": "mia", "to": "jack", "amount": 50 },
+    { "from": "mia", "to": "mia", "amount": 81.67 },
+    { "from": "jack", "to": "mia", "amount": 76.67 },
+    { "from": "boris", "to": "mia", "amount": 81.67 },
+    { "from": "boris", "to": "boris", "amount": 10 },
+    { "from": "mia", "to": "boris", "amount": 10 },
+    { "from": "boris", "to": "boris", "amount": 3 },
+    { "from": "jack", "to": "boris", "amount": 3 },
+    { "from": "mia", "to": "boris", "amount": 3 }
+  ]

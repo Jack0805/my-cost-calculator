@@ -1,17 +1,17 @@
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import { GroupMemberPageWrapper } from './GroupMember.styles';
-import { stringAvatar, capitalizeFirstChar } from '../../utils/helpers';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import { useState, useRef, useEffect } from 'react'; 
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { addMember, removeMember } from '../../store/groupMembersSlice';
-import Button from '@mui/material/Button';
-import { useNavigateTo } from '../../hooks/';
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import { GroupMemberPageWrapper } from "./GroupMember.styles";
+import { stringAvatar, capitalizeFirstChar } from "../../utils/helpers";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import { useState, useRef, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { addMember, removeMember } from "../../store/groupMembersSlice";
+import Button from "@mui/material/Button";
+import { useNavigateTo } from "../../hooks/";
 
 export const GroupMemberPage: React.FC = () => {
   const { navigateToCostItemsPage, navigateBack } = useNavigateTo();
@@ -24,21 +24,21 @@ export const GroupMemberPage: React.FC = () => {
   const handleAddName = () => {
     setInputValue("");
     dispatch(addMember(capitalizeFirstChar(inputValue)));
-  }
+  };
 
   const handleRemoveName = () => {
     dispatch(removeMember());
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // Update state with input value
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
       addButtonRef.current?.click(); // Trigger button click
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       event.preventDefault();
       removeButtonRef.current?.click();
     }
@@ -46,95 +46,101 @@ export const GroupMemberPage: React.FC = () => {
 
   useEffect(() => {
     // Add keydown event listener
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     // Clean up event listener on component unmount
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
-  console.log(names)
   return (
     <GroupMemberPageWrapper>
-        <Box
+      <Box
         component="form"
-        sx={{ 
-          '& > :not(style)': { m: 1 },
+        sx={{
+          "& > :not(style)": { m: 1 },
           width: "60vw",
-          marginTop: '15px'
+          marginTop: "15px",
         }}
         noValidate
         autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="Person Name"
+          variant="outlined"
+          value={inputValue}
+          onChange={handleChange}
+          sx={{
+            width: "60%",
+          }}
+        />
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => handleAddName()}
+          ref={addButtonRef}
         >
-            <TextField 
-              id="outlined-basic" 
-              label="Person Name" 
-              variant="outlined" 
-              value={inputValue} 
-              onChange={handleChange}
-              sx={{
-                width: '60%'
-              }} 
-            />
-            <Fab color="primary" aria-label="add" onClick={() => handleAddName()} ref={addButtonRef}>
-                <AddIcon />
-            </Fab>
-            <Fab color="error" aria-label="add" onClick={() => handleRemoveName()} ref={removeButtonRef}>
-                <CloseIcon />
-            </Fab>
-        </Box>
-        <Box
+          <AddIcon />
+        </Fab>
+        <Fab
+          color="error"
+          aria-label="add"
+          onClick={() => handleRemoveName()}
+          ref={removeButtonRef}
+        >
+          <CloseIcon />
+        </Fab>
+      </Box>
+      <Box
         component="form"
-        sx={{ 
-          '& > :not(style)': { m: 1 },
+        sx={{
+          "& > :not(style)": { m: 1 },
           width: "60vw",
-          marginTop: '30px'
+          marginTop: "30px",
         }}
         noValidate
         autoComplete="off"
-        >
-          <Stack 
-            direction="row" 
-            spacing={2} 
-            sx={{
-              flexWrap: 'wrap',
-              gap: '16px', // Allow items to wrap to the next line
-            }}
-          >
-            {
-              names.length > 0 && names.map((name, index) => {
-                return (
-                  <Avatar {...stringAvatar(name)} key={index}/>
-                )
-              } )
-            }
-          </Stack>
-        </Box>
-        <Button 
-          variant="contained" 
-          color="primary" 
+      >
+        <Stack
+          direction="row"
+          spacing={2}
           sx={{
-            width: '100%',  // Set the width
-            height: '50px',  // Set the height
-            marginTop: '30px'
+            flexWrap: "wrap",
+            gap: "16px", // Allow items to wrap to the next line
           }}
-          onClick={() => navigateToCostItemsPage()}
         >
-            NEXT
-        </Button>
-        <Button 
-          variant="contained" 
-          color="secondary" 
-          sx={{
-            width: '100%',  // Set the width
-            height: '50px',  // Set the height
-            marginTop: '30px'
-          }}
-          onClick={() => navigateBack()}
-        >
-            BACK
-        </Button>
+          {names.length > 0 &&
+            names.map((name, index) => {
+              return <Avatar {...stringAvatar(name)} key={index} />;
+            })}
+        </Stack>
+      </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          width: "100%", // Set the width
+          height: "50px", // Set the height
+          marginTop: "30px",
+        }}
+        onClick={() => navigateToCostItemsPage()}
+      >
+        NEXT
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        sx={{
+          width: "100%", // Set the width
+          height: "50px", // Set the height
+          marginTop: "30px",
+        }}
+        onClick={() => navigateBack()}
+      >
+        BACK
+      </Button>
     </GroupMemberPageWrapper>
   );
-}
+};

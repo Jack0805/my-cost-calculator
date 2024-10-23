@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import { CostItemsPageWrapper } from "./CostItemsPage.styles";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
@@ -27,7 +28,7 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
 export const CostItemsPage: React.FC = () => {
-  const { navigateBack } = useNavigateTo();
+  const { navigateBack, navigateToCalculationPage } = useNavigateTo();
   const dispatch = useAppDispatch(); // Dispatch actions
   const names = useAppSelector((state) => state.groupMember.names);
   const items = useAppSelector((state) => state.costItems.items); // Select items from state
@@ -53,6 +54,9 @@ export const CostItemsPage: React.FC = () => {
         paidBy: selectedValue,
       })
     );
+  };
+  const handleRemoveItem = () => {
+    dispatch(removeItem());
   };
   const handleEditSharedBy = (itemIndex: number, shareByIndex: number) => {
     dispatch(
@@ -107,10 +111,23 @@ export const CostItemsPage: React.FC = () => {
           <Fab color="primary" aria-label="add" onClick={() => handleAddItem()}>
             <AddIcon />
           </Fab>
+          <Fab
+            color="error"
+            aria-label="add"
+            onClick={() => handleRemoveItem()}
+          >
+            <CloseIcon />
+          </Fab>
         </Box>
         {items.map((item, itemIndex) => {
           return (
-            <Accordion key={itemIndex} defaultExpanded>
+            <Accordion
+              key={itemIndex}
+              sx={{
+                width: "100%",
+              }}
+              defaultExpanded
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
@@ -144,6 +161,21 @@ export const CostItemsPage: React.FC = () => {
             </Accordion>
           );
         })}
+
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            width: "100%", // Set the width
+            height: "50px", // Set the height
+            marginTop: "30px",
+          }}
+          onClick={() => {
+            navigateToCalculationPage();
+          }}
+        >
+          CALCULATE
+        </Button>
 
         <Button
           variant="contained"
