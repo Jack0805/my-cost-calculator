@@ -61,7 +61,8 @@ function calculateDetailedDebts(participants: CostItem[]): Debt[] {
 
   // Step 1: Collect all individual debts
   participants.forEach((payer) => {
-    const totalAmount = payer.amount;
+    const totalAmount = payer.amount || 0;
+
     const sharePerPerson = totalAmount / payer.shareBy.length;
 
     payer.shareBy.forEach((participant) => {

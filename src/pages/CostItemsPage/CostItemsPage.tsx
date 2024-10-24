@@ -7,6 +7,7 @@ import { CostItemsPageWrapper } from "./CostItemsPage.styles";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { convertArray } from "../../utils/helpers";
+import { CustomizedSteppers } from "../../components";
 import {
   Select,
   MenuItem,
@@ -16,13 +17,14 @@ import {
 } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { addItem, removeItem, updateItem } from "../../store/costItemsSlice";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import InputAdornment from "@mui/material/InputAdornment";
 
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
@@ -34,7 +36,10 @@ export const CostItemsPage: React.FC = () => {
   const items = useAppSelector((state) => state.costItems.items); // Select items from state
   const [selectedValue, setSelectedValue] = useState<string>(names[0]);
   const [inputItemValue, setInputItemValue] = useState<string>("");
-  const [inputAmountValue, setInputAmountValue] = useState<number>(0);
+  const [inputAmountValue, setInputAmountValue] = useState<number | undefined>(
+    undefined
+  );
+  const itemInputRef = useRef<HTMLInputElement>(null);
 
   const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputItemValue(event.target.value); // Update state with input value
@@ -67,21 +72,30 @@ export const CostItemsPage: React.FC = () => {
       })
     );
   };
+
+  useEffect(() => {
+    if (itemInputRef.current) {
+      itemInputRef.current.focus(); // Safely focus the TextField
+    } // Set focus to the TextField using the ref
+  }, []);
+
   return (
     <>
       <CostItemsPageWrapper>
+        <CustomizedSteppers currentStep={1} />
         <Box
           component="form"
-          sx={{ "& > :not(style)": { m: 1 } }}
+          sx={{ "& > :not(style)": { m: 1 }, marginTop: "25px" }}
           noValidate
           autoComplete="off"
         >
           <TextField
             id="outlined-basic"
-            label="Item"
+            label="Bill Name"
             variant="outlined"
             value={inputItemValue}
             onChange={handleItemChange}
+            inputRef={itemInputRef}
           />
           <TextField
             id="outlined-basic"
@@ -89,6 +103,12 @@ export const CostItemsPage: React.FC = () => {
             variant="outlined"
             value={inputAmountValue}
             onChange={handleAmountChange}
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
           />
           <FormControl>
             <InputLabel id="demo-simple-select-label">Paid By</InputLabel>
@@ -133,7 +153,7 @@ export const CostItemsPage: React.FC = () => {
                 aria-controls="panel1-content"
                 id="panel1-header"
               >
-                {`${item.itemName} ${item.amount} paid by ${item.paidBy}, and shared by:`}
+                {`${item.itemName} $${item.amount} paid by ${item.paidBy}, and shared with:`}
               </AccordionSummary>
               <AccordionDetails>
                 <Stack

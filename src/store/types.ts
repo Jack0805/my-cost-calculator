@@ -9,7 +9,7 @@ type ShareBy = {
 
 export type CostItem = {
   itemName: string;
-  amount: number;
+  amount?: number;
   shareBy: ShareBy[];
   paidBy: string;
 };

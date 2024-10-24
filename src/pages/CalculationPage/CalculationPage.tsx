@@ -8,6 +8,7 @@ import {
   filterSharedItems,
   convertDebts,
 } from "../../utils/helpers";
+import { CustomizedSteppers } from "../../components";
 
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -48,7 +49,15 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
   return (
     <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+      <TableRow
+        sx={{
+          "&:hover": {
+            backgroundColor: "lightgreen", // Highlight on hover
+            cursor: "pointer", // Optional: change cursor to pointer
+          },
+          // Keep existing border styling
+        }}
+      >
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -62,8 +71,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           {row.name}
         </TableCell>
         {row.shallPayAmount.map((amount, index) => (
-          <TableCell key={index} align="right">
-            {amount}
+          <TableCell key={index} align="center">
+            {`$${amount}`}
           </TableCell>
         ))}
       </TableRow>
@@ -110,94 +119,31 @@ export const CalculationPage: React.FC = () => {
   const { navigateBack } = useNavigateTo();
   const names = useAppSelector((state) => state.groupMember.names);
   const items = useAppSelector((state) => state.costItems.items);
-
-  const test = [
-    {
-      name: "jack",
-      owes: [1, 2, 3],
-    },
-    {
-      name: "mia",
-      owes: [1, 2, 3],
-    },
-    {
-      name: "boris",
-      owes: [1, 2, 3],
-    },
-  ];
-
-  const participants = [
-    {
-      itemName: "wool",
-      paidBy: "jack",
-      amount: 100,
-      shareBy: [
-        { name: "jack", isShared: true },
-        { name: "mia", isShared: true },
-      ],
-    },
-    {
-      itemName: "wool1",
-      paidBy: "mia",
-      amount: 10,
-      shareBy: [
-        { name: "mia", isShared: true },
-        { name: "boris", isShared: true },
-      ],
-    },
-    {
-      itemName: "wool",
-      paidBy: "mia",
-      amount: 230,
-      shareBy: [
-        { name: "mia", isShared: true },
-        { name: "jack", isShared: true },
-        { name: "boris", isShared: true },
-      ],
-    },
-    {
-      itemName: "wool",
-      paidBy: "boris",
-      amount: 20,
-      shareBy: [
-        { name: "boris", isShared: true },
-        { name: "mia", isShared: true },
-      ],
-    },
-    {
-      itemName: "wool2",
-      paidBy: "boris",
-      amount: 9,
-      shareBy: [
-        { name: "boris", isShared: true },
-        { name: "jack", isShared: true },
-        { name: "mia", isShared: true },
-      ],
-    },
-  ];
-
   const result = convertDebts(
     calculateDetailedDebts(filterSharedItems(items)),
     names
   );
 
-  const result1 = calculateDetailedDebts(filterSharedItems(items));
-
-  console.log(result1);
-
   const rows = result.map((item) => createData(item.name, item.owes));
 
   return (
     <CalculationPageWrapper>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
+      <CustomizedSteppers currentStep={2} />
+      <TableContainer
+        component={Paper}
+        sx={{
+          "& > :not(style)": { m: 1 },
+          marginTop: "25px",
+        }}
+      >
+        <Table aria-label="collapsible table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell />
               <TableCell>Name</TableCell>
               {names.map((name, index) => {
                 return (
-                  <TableCell key={index} align="right">
+                  <TableCell key={index} align="center">
                     {name}
                   </TableCell>
                 );

@@ -12,6 +12,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { addMember, removeMember } from "../../store/groupMembersSlice";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
+import { CustomizedSteppers } from "../../components";
 
 export const GroupMemberPage: React.FC = () => {
   const { navigateToCostItemsPage, navigateBack } = useNavigateTo();
@@ -20,6 +21,7 @@ export const GroupMemberPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const names = useAppSelector((state) => state.groupMember.names); // Select items from state
   const dispatch = useAppDispatch(); // Dispatch actions
+  const itemInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddName = () => {
     setInputValue("");
@@ -45,6 +47,9 @@ export const GroupMemberPage: React.FC = () => {
   };
 
   useEffect(() => {
+    if (itemInputRef.current) {
+      itemInputRef.current.focus(); // Safely focus the TextField
+    }
     // Add keydown event listener
     window.addEventListener("keydown", handleKeyDown);
 
@@ -56,12 +61,13 @@ export const GroupMemberPage: React.FC = () => {
 
   return (
     <GroupMemberPageWrapper>
+      <CustomizedSteppers currentStep={0} />
       <Box
         component="form"
         sx={{
           "& > :not(style)": { m: 1 },
           width: "60vw",
-          marginTop: "15px",
+          marginTop: "25px",
         }}
         noValidate
         autoComplete="off"
@@ -75,6 +81,7 @@ export const GroupMemberPage: React.FC = () => {
           sx={{
             width: "60%",
           }}
+          inputRef={itemInputRef}
         />
         <Fab
           color="primary"
