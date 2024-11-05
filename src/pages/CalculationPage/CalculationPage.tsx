@@ -7,6 +7,8 @@ import {
   calculateDetailedDebts,
   filterSharedItems,
   convertDebts,
+  groupItemsByPaidBy,
+  BillsSummary,
 } from "../../utils/helpers";
 import { CustomizedSteppers } from "../../components";
 
@@ -24,29 +26,25 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-function createData(name: string, shallPayAmount: number[]) {
+import uniqid from "uniqid";
+import { SiteHeader, SiteFooter } from "../../components";
+
+function createData(
+  name: string,
+  shallPayAmount: number[],
+  BillsSummary: BillsSummary
+) {
   return {
     name,
     shallPayAmount,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    BillsSummary,
   };
 }
 
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
-
+  const paidAnyBill = row.BillsSummary[row.name].length > 0;
   return (
     <React.Fragment>
       <TableRow
@@ -71,7 +69,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           {row.name}
         </TableCell>
         {row.shallPayAmount.map((amount, index) => (
-          <TableCell key={index} align="center">
+          <TableCell key={uniqid()} align="center">
             {`$${amount}`}
           </TableCell>
         ))}
@@ -81,32 +79,32 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                {paidAnyBill ? "Bills Paid" : "No Bills Paid"}
               </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * 50 * 100) / 100}
-                      </TableCell>
+              {paidAnyBill && (
+                <Table size="small" aria-label="purchases">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Bill Name</TableCell>
+                      <TableCell align="center">Total price ($)</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {row.BillsSummary[row.name].map((historyRow) => (
+                      <TableRow key={uniqid()}>
+                        <TableCell align="center">
+                          {historyRow.itemName}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(Math.round(historyRow.amount * 100) / 100).toFixed(
+                            2
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </Box>
           </Collapse>
         </TableCell>
@@ -124,44 +122,60 @@ export const CalculationPage: React.FC = () => {
     names
   );
 
-  const rows = result.map((item) => createData(item.name, item.owes));
+  const rows = result.map((item) =>
+    createData(item.name, item.owes, groupItemsByPaidBy(items, names))
+  );
 
   return (
     <CalculationPageWrapper>
+      <SiteHeader />
       <CustomizedSteppers currentStep={2} />
-      <TableContainer
-        component={Paper}
+      <Paper
         sx={{
-          "& > :not(style)": { m: 1 },
-          marginTop: "25px",
+          height: "40vh",
+          width: "80%",
+          padding: "25px",
+          overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
         }}
+        elevation={3}
       >
-        <Table aria-label="collapsible table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Name</TableCell>
-              {names.map((name, index) => {
-                return (
-                  <TableCell key={index} align="center">
-                    {name}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <TableContainer
+          component={Paper}
+          sx={{
+            "& > :not(style)": { m: 1 },
+            marginTop: "25px",
+          }}
+        >
+          <Table aria-label="collapsible table" stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Name</TableCell>
+                {names.map((name) => {
+                  return (
+                    <TableCell key={uniqid()} align="center">
+                      {name}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <Row key={uniqid()} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       <Button
         variant="contained"
         color="secondary"
         sx={{
-          width: "100%", // Set the width
+          width: "50%", // Set the width
           height: "50px", // Set the height
           marginTop: "30px",
         }}
@@ -169,6 +183,7 @@ export const CalculationPage: React.FC = () => {
       >
         BACK
       </Button>
+      <SiteFooter />
     </CalculationPageWrapper>
   );
 };

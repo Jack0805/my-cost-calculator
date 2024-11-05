@@ -56,6 +56,10 @@ interface Owes {
   owes: number[];
 }
 
+interface BillsSummary {
+  [key: string]: { itemName: string; amount: number }[];
+}
+
 function calculateDetailedDebts(participants: CostItem[]): Debt[] {
   const debts: Debt[] = [];
 
@@ -158,6 +162,27 @@ function convertDebts(debts: Debt[], namesOrder: string[]): Owes[] {
   return result;
 }
 
+function groupItemsByPaidBy(items: CostItem[], people: string[]): BillsSummary {
+  const result: BillsSummary = {};
+
+  // Initialize the result object with empty arrays for each person
+  people.forEach((person) => {
+    result[person] = [];
+  });
+
+  // Group items by the 'paidBy' field
+  items.forEach((item) => {
+    if (result[item.paidBy]) {
+      result[item.paidBy].push({
+        itemName: item.itemName,
+        amount: item.amount || 0,
+      });
+    }
+  });
+
+  return result;
+}
+
 export {
   stringToColor,
   stringAvatar,
@@ -167,7 +192,10 @@ export {
   mergeDebts,
   filterSharedItems,
   convertDebts,
+  groupItemsByPaidBy,
 };
+
+export type { BillsSummary };
 
 // const participants: Participant[] = [
 //   { name: "jack", paid: 100, sharesWith: ["jack", "mia"] },

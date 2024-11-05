@@ -3,7 +3,8 @@ import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { CostItemsPageWrapper } from "./CostItemsPage.styles";
+import Paper from "@mui/material/Paper";
+import { CostItemsPageWrapper, ItemTitleWrapper } from "./CostItemsPage.styles";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { convertArray } from "../../utils/helpers";
@@ -17,17 +18,22 @@ import {
 } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { addItem, removeItem, updateItem } from "../../store/costItemsSlice";
+import { ButtonGroupWrapper } from "../../utils/Global.styles";
 import { useState, useRef, useEffect } from "react";
 
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
+// import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
-
-import Chip from "@mui/material/Chip";
+import { Chip, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import uniqid from "uniqid";
+import { SiteHeader, SiteFooter } from "../../components";
 
 export const CostItemsPage: React.FC = () => {
   const { navigateBack, navigateToCalculationPage } = useNavigateTo();
@@ -36,9 +42,7 @@ export const CostItemsPage: React.FC = () => {
   const items = useAppSelector((state) => state.costItems.items); // Select items from state
   const [selectedValue, setSelectedValue] = useState<string>(names[0]);
   const [inputItemValue, setInputItemValue] = useState<string>("");
-  const [inputAmountValue, setInputAmountValue] = useState<number | undefined>(
-    undefined
-  );
+  const [inputAmountValue, setInputAmountValue] = useState<number | string>("");
   const itemInputRef = useRef<HTMLInputElement>(null);
 
   const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +58,7 @@ export const CostItemsPage: React.FC = () => {
     dispatch(
       addItem({
         itemName: inputItemValue,
-        amount: inputAmountValue,
+        amount: inputAmountValue as number,
         shareBy: convertArray(names),
         paidBy: selectedValue,
       })
@@ -82,133 +86,178 @@ export const CostItemsPage: React.FC = () => {
   return (
     <>
       <CostItemsPageWrapper>
+        <SiteHeader />
         <CustomizedSteppers currentStep={1} />
-        <Box
-          component="form"
-          sx={{ "& > :not(style)": { m: 1 }, marginTop: "25px" }}
-          noValidate
-          autoComplete="off"
+        <Paper
+          sx={{
+            height: "40vh",
+            width: "80%",
+            padding: "25px",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+          }}
+          elevation={3}
         >
-          <TextField
-            id="outlined-basic"
-            label="Bill Name"
-            variant="outlined"
-            value={inputItemValue}
-            onChange={handleItemChange}
-            inputRef={itemInputRef}
-          />
-          <TextField
-            id="outlined-basic"
-            label="Amount"
-            variant="outlined"
-            value={inputAmountValue}
-            onChange={handleAmountChange}
-            type="number"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            sx={{
+              display: "flex",
+              gap: "10px",
             }}
-          />
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Paid By</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={selectedValue}
-              label="Paid By"
-              onChange={handleChange}
-            >
-              {names.map((name, index) => {
-                return (
-                  <MenuItem value={name} key={index}>
-                    {name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <Fab color="primary" aria-label="add" onClick={() => handleAddItem()}>
-            <AddIcon />
-          </Fab>
-          <Fab
-            color="error"
-            aria-label="add"
-            onClick={() => handleRemoveItem()}
           >
-            <CloseIcon />
-          </Fab>
-        </Box>
-        {items.map((item, itemIndex) => {
-          return (
-            <Accordion
-              key={itemIndex}
+            <label htmlFor="bill_name_input" />
+            <TextField
+              id="bill_name_input"
+              name="billName"
+              label="Bill Name"
+              variant="outlined"
+              value={inputItemValue}
+              onChange={handleItemChange}
+              inputRef={itemInputRef}
               sx={{
-                width: "100%",
+                width: "20%",
               }}
-              defaultExpanded
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
+            />
+            <label htmlFor="amount_input" />
+            <TextField
+              id="amount_input"
+              name="amount"
+              label="Amount"
+              variant="outlined"
+              value={inputAmountValue}
+              onChange={handleAmountChange}
+              type="number"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+              sx={{
+                width: "20%",
+              }}
+            />
+            <FormControl>
+              <InputLabel id="select-paid-by">Paid By</InputLabel>
+              <Select
+                labelId="select-paid-by"
+                id="demo-simple-select"
+                name="simple-select"
+                value={selectedValue}
+                label="Paid By"
+                onChange={handleChange}
               >
-                {`${item.itemName} $${item.amount} paid by ${item.paidBy}, and shared with:`}
-              </AccordionSummary>
-              <AccordionDetails>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{
-                    flexWrap: "wrap",
-                    gap: "10px", // Allow items to wrap to the next line
-                  }}
+                {names.map((name) => {
+                  return (
+                    <MenuItem value={name} key={uniqid()}>
+                      {name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <IconButton
+              color="primary"
+              aria-label="add"
+              size="small"
+              onClick={() => handleAddItem()}
+            >
+              <AddIcon />
+            </IconButton>
+            <IconButton
+              color="error"
+              aria-label="add"
+              size="small"
+              onClick={() => handleRemoveItem()}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+          {items.map((item, itemIndex) => {
+            return (
+              <Accordion
+                key={uniqid()}
+                sx={{
+                  width: "100%",
+                }}
+                elevation={3}
+                defaultExpanded
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
                 >
-                  {item.shareBy.map((shareBy, shareByIndex) => {
-                    return (
-                      <Chip
-                        label={shareBy.name}
-                        color={shareBy.isShared ? "primary" : "default"}
-                        key={shareByIndex}
-                        onClick={() => {
-                          handleEditSharedBy(itemIndex, shareByIndex);
-                        }}
-                      />
-                    );
-                  })}
-                </Stack>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
+                  <ItemTitleWrapper>
+                    <Chip
+                      label={
+                        <strong>{`${item.itemName} $${item.amount} paid by ${item.paidBy}`}</strong>
+                      }
+                      color="success"
+                      variant="outlined"
+                    />
+                  </ItemTitleWrapper>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                      flexWrap: "wrap",
+                      gap: "10px", // Allow items to wrap to the next line
+                    }}
+                  >
+                    {item.shareBy.map((shareBy, shareByIndex) => {
+                      return (
+                        <Chip
+                          label={shareBy.name}
+                          color={shareBy.isShared ? "primary" : "default"}
+                          key={uniqid()}
+                          onClick={() => {
+                            handleEditSharedBy(itemIndex, shareByIndex);
+                          }}
+                        />
+                      );
+                    })}
+                  </Stack>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
+        </Paper>
+        <ButtonGroupWrapper>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: "25%", // Set the width
+              height: "50px", // Set the height
+              marginTop: "20px",
+            }}
+            onClick={() => {
+              navigateToCalculationPage();
+            }}
+          >
+            CALCULATE
+          </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            width: "100%", // Set the width
-            height: "50px", // Set the height
-            marginTop: "30px",
-          }}
-          onClick={() => {
-            navigateToCalculationPage();
-          }}
-        >
-          CALCULATE
-        </Button>
-
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{
-            width: "100%", // Set the width
-            height: "50px", // Set the height
-            marginTop: "30px",
-          }}
-          onClick={() => navigateBack()}
-        >
-          BACK
-        </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              width: "25%", // Set the width
+              height: "50px", // Set the height
+              marginTop: "20px",
+            }}
+            onClick={() => navigateBack()}
+          >
+            BACK
+          </Button>
+        </ButtonGroupWrapper>
+        <SiteFooter />
       </CostItemsPageWrapper>
     </>
   );
