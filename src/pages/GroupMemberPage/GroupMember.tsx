@@ -11,10 +11,15 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { useState, useRef, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { addMember, removeMember } from "../../store/groupMembersSlice";
+import {
+  addMember,
+  removeMember,
+  removeSpecificMember,
+} from "../../store/groupMembersSlice";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { CustomizedSteppers } from "../../components";
+import Chip from "@mui/material/Chip";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
@@ -33,9 +38,9 @@ export const GroupMemberPage: React.FC = () => {
     dispatch(addMember(capitalizeFirstChar(inputValue)));
   };
 
-  const handleRemoveName = () => {
-    dispatch(removeMember());
-  };
+  // const handleRemoveName = () => {
+  //   dispatch(removeMember());
+  // };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // Update state with input value
@@ -49,6 +54,10 @@ export const GroupMemberPage: React.FC = () => {
       event.preventDefault();
       removeButtonRef.current?.click();
     }
+  };
+
+  const handleDelete = (index: number) => {
+    dispatch(removeSpecificMember(index));
   };
 
   useEffect(() => {
@@ -68,6 +77,10 @@ export const GroupMemberPage: React.FC = () => {
     <GroupMemberPageWrapper>
       <SiteHeader />
       <CustomizedSteppers currentStep={0} />
+      {/* <Alert severity="error" sx={{ width: "80%" }}>
+        In each row, the person in the leftmost column should pay the shared
+        costs to the people in the columns to the right.
+      </Alert> */}
       <Paper
         sx={{
           height: "40vh",
@@ -105,14 +118,6 @@ export const GroupMemberPage: React.FC = () => {
           >
             <AddIcon />
           </Fab>
-          <Fab
-            color="error"
-            aria-label="add"
-            onClick={() => handleRemoveName()}
-            ref={removeButtonRef}
-          >
-            <CloseIcon />
-          </Fab>
         </Box>
         <Stack
           direction="row"
@@ -120,12 +125,20 @@ export const GroupMemberPage: React.FC = () => {
           sx={{
             flexWrap: "wrap",
             gap: "16px", // Allow items to wrap to the next line
-            padding: "20px",
+            padding: "40px 0",
           }}
         >
           {names.length > 0 &&
-            names.map((name) => {
-              return <Avatar {...stringAvatar(name)} key={uniqid()} />;
+            names.map((name, index) => {
+              return (
+                <Chip
+                  avatar={<Avatar {...stringAvatar(name)}>{name[0]}</Avatar>}
+                  label={name}
+                  key={uniqid()}
+                  onDelete={() => handleDelete(index)}
+                />
+              );
+              // return <Avatar {...stringAvatar(name)} key={uniqid()} />;
             })}
         </Stack>
       </Paper>
@@ -143,6 +156,7 @@ export const GroupMemberPage: React.FC = () => {
           BACK
         </Button>
         <Button
+          disabled={names.length <= 0}
           variant="contained"
           color="primary"
           sx={{

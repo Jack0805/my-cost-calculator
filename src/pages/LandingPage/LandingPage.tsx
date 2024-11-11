@@ -11,19 +11,6 @@ import Typography from "@mui/material/Typography";
 import { SiteHeader, SiteFooter } from "../../components";
 import { LandingPageWrapper } from "./index";
 
-// export const LandingPage: React.FC = () => {
-
-//   const { navigateToGroupMemberPage } = useNavigateTo();
-
-//   return (
-//       <>
-//         <Button variant="contained" color="primary" onClick={() => navigateToGroupMemberPage()}>
-//             Start Calculation
-//         </Button>
-//       </>
-//   );
-// };
-
 export const LandingPage: React.FC = () => {
   const { navigateToGroupMemberPage } = useNavigateTo();
   return (
@@ -34,7 +21,7 @@ export const LandingPage: React.FC = () => {
           Introducing:
         </Typography>
         <Typography variant="h5" component="div">
-          Split Bills
+          Sharing Group Bills
         </Typography>
         <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
           free to use

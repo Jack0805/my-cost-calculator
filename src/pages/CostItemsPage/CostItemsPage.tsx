@@ -4,7 +4,11 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
-import { CostItemsPageWrapper, ItemTitleWrapper } from "./CostItemsPage.styles";
+import {
+  CostItemsPageWrapper,
+  ItemTitleWrapper,
+  AccordionWrapper,
+} from "./CostItemsPage.styles";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { convertArray } from "../../utils/helpers";
@@ -17,11 +21,17 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { addItem, removeItem, updateItem } from "../../store/costItemsSlice";
+import {
+  addItem,
+  removeItem,
+  removeSpecificItem,
+  updateItem,
+  updateExpand,
+} from "../../store/costItemsSlice";
 import { ButtonGroupWrapper } from "../../utils/Global.styles";
 import { useState, useRef, useEffect } from "react";
 
-import Accordion from "@mui/material/Accordion";
+import Accordion, { AccordionSlots } from "@mui/material/Accordion";
 // import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -31,6 +41,10 @@ import { Chip, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Fade from "@mui/material/Fade";
+import Collapse from "@mui/material/Collapse";
+import Grow from "@mui/material/Grow";
+import Tooltip from "@mui/material/Tooltip";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
@@ -61,11 +75,12 @@ export const CostItemsPage: React.FC = () => {
         amount: inputAmountValue as number,
         shareBy: convertArray(names),
         paidBy: selectedValue,
+        accordionExpended: true,
       })
     );
   };
-  const handleRemoveItem = () => {
-    dispatch(removeItem());
+  const handleRemoveItem = (index: number) => {
+    dispatch(removeSpecificItem(index));
   };
   const handleEditSharedBy = (itemIndex: number, shareByIndex: number) => {
     dispatch(
@@ -76,6 +91,18 @@ export const CostItemsPage: React.FC = () => {
       })
     );
   };
+
+  const handleChangeAccordionExpended =
+    (itemIndex: number) =>
+    (event: React.SyntheticEvent, isExpanded: boolean) => {
+      console.log(isExpanded);
+      dispatch(
+        updateExpand({
+          itemIndex,
+          expanded: isExpanded,
+        })
+      );
+    };
 
   useEffect(() => {
     if (itemInputRef.current) {
@@ -159,77 +186,96 @@ export const CostItemsPage: React.FC = () => {
                 })}
               </Select>
             </FormControl>
-            <IconButton
+            <Fab
               color="primary"
               aria-label="add"
-              size="small"
               onClick={() => handleAddItem()}
             >
               <AddIcon />
-            </IconButton>
-            <IconButton
-              color="error"
-              aria-label="add"
-              size="small"
-              onClick={() => handleRemoveItem()}
-            >
-              <DeleteIcon />
-            </IconButton>
+            </Fab>
           </Box>
           {items.map((item, itemIndex) => {
             return (
-              <Accordion
-                key={uniqid()}
-                sx={{
-                  width: "100%",
-                }}
-                elevation={3}
-                defaultExpanded
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1-content"
-                  id="panel1-header"
+              <AccordionWrapper>
+                <Accordion
+                  key={uniqid()}
+                  sx={{
+                    width: "85%",
+                  }}
+                  elevation={3}
+                  expanded={item.accordionExpended}
+                  onChange={handleChangeAccordionExpended(itemIndex)}
+                  slots={{
+                    transition: Collapse as AccordionSlots["transition"],
+                  }}
+                  slotProps={{ transition: { timeout: 1000 } }}
                 >
-                  <ItemTitleWrapper>
-                    <Chip
-                      label={
-                        <strong>{`${item.itemName} $${item.amount} paid by ${item.paidBy}`}</strong>
-                      }
-                      color="success"
-                      variant="outlined"
-                    />
-                  </ItemTitleWrapper>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{
-                      flexWrap: "wrap",
-                      gap: "10px", // Allow items to wrap to the next line
-                    }}
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
                   >
-                    {item.shareBy.map((shareBy, shareByIndex) => {
-                      return (
-                        <Chip
-                          label={shareBy.name}
-                          color={shareBy.isShared ? "primary" : "default"}
-                          key={uniqid()}
-                          onClick={() => {
-                            handleEditSharedBy(itemIndex, shareByIndex);
-                          }}
-                        />
-                      );
-                    })}
-                  </Stack>
-                </AccordionDetails>
-              </Accordion>
+                    <ItemTitleWrapper>
+                      <Chip
+                        label={
+                          <strong>{`${item.itemName} $${item.amount} paid by ${item.paidBy}`}</strong>
+                        }
+                        color="success"
+                        variant="outlined"
+                      />
+                    </ItemTitleWrapper>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{
+                        flexWrap: "wrap",
+                        gap: "10px", // Allow items to wrap to the next line
+                      }}
+                    >
+                      {item.shareBy.map((shareBy, shareByIndex) => {
+                        return (
+                          <Chip
+                            label={shareBy.name}
+                            color={shareBy.isShared ? "primary" : "default"}
+                            key={uniqid()}
+                            onClick={() => {
+                              handleEditSharedBy(itemIndex, shareByIndex);
+                            }}
+                          />
+                        );
+                      })}
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+                <IconButton
+                  color="error"
+                  aria-label="add"
+                  size="small"
+                  onClick={() => handleRemoveItem(itemIndex)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </AccordionWrapper>
             );
           })}
         </Paper>
         <ButtonGroupWrapper>
           <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              width: "25%", // Set the width
+              height: "50px", // Set the height
+              marginTop: "20px",
+            }}
+            onClick={() => navigateBack()}
+          >
+            BACK
+          </Button>
+          <Button
+            disabled={items.length <= 0}
             variant="contained"
             color="primary"
             sx={{
@@ -242,19 +288,6 @@ export const CostItemsPage: React.FC = () => {
             }}
           >
             CALCULATE
-          </Button>
-
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{
-              width: "25%", // Set the width
-              height: "50px", // Set the height
-              marginTop: "20px",
-            }}
-            onClick={() => navigateBack()}
-          >
-            BACK
           </Button>
         </ButtonGroupWrapper>
         <SiteFooter />

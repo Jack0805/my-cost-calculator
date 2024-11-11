@@ -1,3 +1,4 @@
+import { Height } from "@mui/icons-material";
 import { CostItem } from "../store/types";
 function stringToColor(string: string) {
   let hash = 0;
@@ -27,9 +28,12 @@ function stringAvatar(name: string) {
   return {
     sx: {
       bgcolor: stringToColor(name),
-      width: size,
+      width: "12px !important",
+      height: "12px !important",
+      color: "white !important",
       // height: size,
       // fontSize: size / 2.5,
+
       padding: 1,
     },
     children: firstName, // Display the full first name

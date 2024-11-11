@@ -25,6 +25,8 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Chip } from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
@@ -53,10 +55,12 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             backgroundColor: "lightgreen", // Highlight on hover
             cursor: "pointer", // Optional: change cursor to pointer
           },
+          background: "#e3e8e4",
           // Keep existing border styling
         }}
+        onClick={() => setOpen(!open)}
       >
-        <TableCell>
+        {/* <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -64,8 +68,11 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TableCell>
+        </TableCell> */}
         <TableCell component="th" scope="row">
+          <IconButton aria-label="expand row" size="small">
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
           {row.name}
         </TableCell>
         {row.shallPayAmount.map((amount, index) => (
@@ -93,7 +100,11 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     {row.BillsSummary[row.name].map((historyRow) => (
                       <TableRow key={uniqid()}>
                         <TableCell align="center">
-                          {historyRow.itemName}
+                          <Chip
+                            label={<strong>{historyRow.itemName}</strong>}
+                            color="success"
+                            variant="outlined"
+                          />
                         </TableCell>
                         <TableCell align="center">
                           {(Math.round(historyRow.amount * 100) / 100).toFixed(
@@ -130,6 +141,10 @@ export const CalculationPage: React.FC = () => {
     <CalculationPageWrapper>
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
+      <Alert severity="info" sx={{ width: "80%" }}>
+        In each row, the person in the leftmost column should pay the shared
+        costs to the people in the columns to the right.
+      </Alert>
       <Paper
         sx={{
           height: "40vh",
@@ -146,17 +161,17 @@ export const CalculationPage: React.FC = () => {
           component={Paper}
           sx={{
             "& > :not(style)": { m: 1 },
-            marginTop: "25px",
           }}
         >
           <Table aria-label="collapsible table" stickyHeader>
             <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Name</TableCell>
+              <TableRow sx={{ height: "10px" }}>
+                <TableCell padding="none" align="center">
+                  Payee
+                </TableCell>
                 {names.map((name) => {
                   return (
-                    <TableCell key={uniqid()} align="center">
+                    <TableCell padding="none" key={uniqid()} align="center">
                       {name}
                     </TableCell>
                   );
@@ -177,7 +192,6 @@ export const CalculationPage: React.FC = () => {
         sx={{
           width: "50%", // Set the width
           height: "50px", // Set the height
-          marginTop: "30px",
         }}
         onClick={() => navigateBack()}
       >

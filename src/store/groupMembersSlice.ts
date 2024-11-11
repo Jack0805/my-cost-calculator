@@ -16,9 +16,13 @@ const groupMembersSlice = createSlice({
     removeMember(state) {
       state.names.pop(); // Remove item by index
     },
+    removeSpecificMember(state, action: PayloadAction<number>) {
+      state.names.splice(action.payload, 1);
+    },
   },
 });
 
-export const { addMember, removeMember } = groupMembersSlice.actions;
+export const { addMember, removeMember, removeSpecificMember } =
+  groupMembersSlice.actions;
 
 export default groupMembersSlice.reducer;

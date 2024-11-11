@@ -14,3 +14,11 @@ export const ItemTitleWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const AccordionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;

@@ -12,6 +12,7 @@ export type CostItem = {
   amount?: number;
   shareBy: ShareBy[];
   paidBy: string;
+  accordionExpended?: boolean;
 };
 
 export interface CostItemsInitialState {
@@ -22,4 +23,9 @@ export type EditItemTypePayload = {
   itemIndex: number;
   shareByIndex: number;
   isShared: boolean;
+};
+
+export type EditItemExpendedTypePayload = {
+  itemIndex: number;
+  expanded: boolean;
 };
