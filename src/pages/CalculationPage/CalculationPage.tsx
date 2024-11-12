@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { CalculationPageWrapper } from "./CalculationPage.styles";
 import {
   calculateDetailedDebts,
@@ -30,6 +30,12 @@ import Alert from "@mui/material/Alert";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
+import { ButtonGroupWrapper } from "../../utils/Global.styles";
+
+import { removeItem } from "../../store/costItemsSlice";
+import { removeMember } from "../../store/groupMembersSlice";
+
+import { ResponsiveDialog } from "../../components/";
 
 function createData(
   name: string,
@@ -125,7 +131,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 }
 
 export const CalculationPage: React.FC = () => {
-  const { navigateBack } = useNavigateTo();
+  const { navigateToLandingPage, navigateBack } = useNavigateTo();
+  const dispatch = useAppDispatch();
   const names = useAppSelector((state) => state.groupMember.names);
   const items = useAppSelector((state) => state.costItems.items);
   const result = convertDebts(
@@ -137,13 +144,23 @@ export const CalculationPage: React.FC = () => {
     createData(item.name, item.owes, groupItemsByPaidBy(items, names))
   );
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <CalculationPageWrapper>
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
       <Alert severity="info" sx={{ width: "80%" }}>
-        In each row, the person in the leftmost column should pay the shared
-        costs to the people in the columns to the right.
+        In each row, the person in the "Payee" column should pay each person in
+        the right columns the specified amount shown below their names.
       </Alert>
       <Paper
         sx={{
@@ -186,18 +203,46 @@ export const CalculationPage: React.FC = () => {
           </Table>
         </TableContainer>
       </Paper>
-      <Button
-        variant="contained"
-        color="secondary"
-        sx={{
-          width: "50%", // Set the width
-          height: "50px", // Set the height
-        }}
-        onClick={() => navigateBack()}
-      >
-        BACK
-      </Button>
+      <ButtonGroupWrapper>
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{
+            width: "25%", // Set the width
+            height: "50px", // Set the height
+            marginTop: "20px",
+          }}
+          onClick={() => navigateBack()}
+        >
+          BACK
+        </Button>
+        <Button
+          sx={{
+            width: "25%", // Set the width
+            height: "50px", // Set the height
+            marginTop: "20px",
+          }}
+          autoFocus
+          onClick={handleClickOpen}
+        >
+          Reset
+        </Button>
+      </ButtonGroupWrapper>
       <SiteFooter />
+      <ResponsiveDialog
+        title="Are You Sure You Want to Reset the Calculation?"
+        description="If you reset the form, all results and data will be lost. Please make sure you have a screenshot of the table. Do you want to continue?"
+        fullScreen={false}
+        open={open}
+        handleClose={handleClose}
+        showContinueButton
+        handleContinue={() => {
+          dispatch(removeItem());
+          dispatch(removeMember());
+          navigateToLandingPage();
+        }}
+        CloseButtonName="No"
+      />
     </CalculationPageWrapper>
   );
 };

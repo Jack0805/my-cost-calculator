@@ -19,7 +19,7 @@ const costItemsSlice = createSlice({
       state.items.push(action.payload); // Add the new item
     },
     removeItem(state) {
-      state.items.pop(); // Remove item by index
+      state.items = []; // Remove item by index
     },
     removeSpecificItem(state, action: PayloadAction<number>) {
       state.items.splice(action.payload, 1);

@@ -11,11 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { useState, useRef, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import {
-  addMember,
-  removeMember,
-  removeSpecificMember,
-} from "../../store/groupMembersSlice";
+import { addMember, removeSpecificMember } from "../../store/groupMembersSlice";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { CustomizedSteppers } from "../../components";
@@ -24,18 +20,36 @@ import Chip from "@mui/material/Chip";
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
 
+import { ResponsiveDialog } from "../../components/";
+
 export const GroupMemberPage: React.FC = () => {
   const { navigateToCostItemsPage, navigateBack } = useNavigateTo();
   const addButtonRef = useRef<HTMLButtonElement>(null);
-  const removeButtonRef = useRef<HTMLButtonElement>(null);
   const [inputValue, setInputValue] = useState<string>("");
+  const [error, setError] = useState(false);
   const names = useAppSelector((state) => state.groupMember.names); // Select items from state
   const dispatch = useAppDispatch(); // Dispatch actions
   const itemInputRef = useRef<HTMLInputElement>(null);
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleAddName = () => {
-    setInputValue("");
-    dispatch(addMember(capitalizeFirstChar(inputValue)));
+    if (!inputValue.trim()) {
+      setError(true);
+    } else if (names.includes(capitalizeFirstChar(inputValue))) {
+      handleClickOpen();
+    } else {
+      setInputValue("");
+      dispatch(addMember(capitalizeFirstChar(inputValue)));
+    }
   };
 
   // const handleRemoveName = () => {
@@ -44,15 +58,15 @@ export const GroupMemberPage: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // Update state with input value
+    if (error && event.target.value) {
+      setError(false); // Remove error when user starts typing
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       event.preventDefault();
       addButtonRef.current?.click(); // Trigger button click
-    } else if (event.key === "Escape") {
-      event.preventDefault();
-      removeButtonRef.current?.click();
     }
   };
 
@@ -106,9 +120,11 @@ export const GroupMemberPage: React.FC = () => {
             value={inputValue}
             onChange={handleChange}
             sx={{
-              width: "150px",
+              width: "200px",
             }}
             inputRef={itemInputRef}
+            error={error}
+            helperText={error ? "The field cannot be empty" : ""}
           />
           <Fab
             color="primary"
@@ -170,6 +186,16 @@ export const GroupMemberPage: React.FC = () => {
         </Button>
       </ButtonGroupWrapper>
       <SiteFooter />
+      <ResponsiveDialog
+        title={`"${capitalizeFirstChar(inputValue)}" is already in the list.`}
+        description="Please try a different one.."
+        fullScreen={false}
+        open={open}
+        handleClose={handleClose}
+        showContinueButton={false}
+        handleContinue={() => {}}
+        CloseButtonName="Try again"
+      />
     </GroupMemberPageWrapper>
   );
 };

@@ -46,12 +46,15 @@ import Collapse from "@mui/material/Collapse";
 import Grow from "@mui/material/Grow";
 import Tooltip from "@mui/material/Tooltip";
 
+import { ResponsiveDialog } from "../../components/";
+
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
 
 export const CostItemsPage: React.FC = () => {
   const { navigateBack, navigateToCalculationPage } = useNavigateTo();
   const dispatch = useAppDispatch(); // Dispatch actions
+  const addButtonRef = useRef<HTMLButtonElement>(null);
   const names = useAppSelector((state) => state.groupMember.names);
   const items = useAppSelector((state) => state.costItems.items); // Select items from state
   const [selectedValue, setSelectedValue] = useState<string>(names[0]);
@@ -59,25 +62,58 @@ export const CostItemsPage: React.FC = () => {
   const [inputAmountValue, setInputAmountValue] = useState<number | string>("");
   const itemInputRef = useRef<HTMLInputElement>(null);
 
+  const [errorItem, setErrorItem] = useState(false);
+  const [errorAmount, setErrorAmount] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputItemValue(event.target.value); // Update state with input value
+    if (errorItem && event.target.value) {
+      setErrorItem(false); // Remove error when user starts typing
+    }
   };
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputAmountValue(event.target.value as unknown as number); // Update state with input value
+    if (errorAmount && event.target.value) {
+      setErrorAmount(false); // Remove error when user starts typing
+    }
   };
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value as string);
   };
   const handleAddItem = () => {
-    dispatch(
-      addItem({
-        itemName: inputItemValue,
-        amount: inputAmountValue as number,
-        shareBy: convertArray(names),
-        paidBy: selectedValue,
-        accordionExpended: true,
-      })
-    );
+    if (!inputItemValue.trim() && !inputAmountValue) {
+      setErrorItem(true);
+      setErrorAmount(true);
+    } else if (!inputItemValue.trim()) {
+      setErrorItem(true);
+    } else if (!inputAmountValue) {
+      setErrorAmount(true);
+    } else {
+      setInputItemValue("");
+      setInputAmountValue("");
+      if (itemInputRef.current) {
+        itemInputRef.current.focus(); // Safely focus the TextField
+      }
+      dispatch(
+        addItem({
+          itemName: inputItemValue,
+          amount: inputAmountValue as number,
+          shareBy: convertArray(names),
+          paidBy: selectedValue,
+          accordionExpended: true,
+        })
+      );
+    }
   };
   const handleRemoveItem = (index: number) => {
     dispatch(removeSpecificItem(index));
@@ -104,10 +140,24 @@ export const CostItemsPage: React.FC = () => {
       );
     };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addButtonRef.current?.click(); // Trigger button click
+    }
+  };
+
   useEffect(() => {
     if (itemInputRef.current) {
       itemInputRef.current.focus(); // Safely focus the TextField
     } // Set focus to the TextField using the ref
+    // Add keydown event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
@@ -148,6 +198,8 @@ export const CostItemsPage: React.FC = () => {
               sx={{
                 width: "20%",
               }}
+              error={errorItem}
+              helperText={errorItem ? "The field cannot be empty" : ""}
             />
             <label htmlFor="amount_input" />
             <TextField
@@ -166,6 +218,8 @@ export const CostItemsPage: React.FC = () => {
               sx={{
                 width: "20%",
               }}
+              error={errorAmount}
+              helperText={errorAmount ? "The field cannot be empty" : ""}
             />
             <FormControl>
               <InputLabel id="select-paid-by">Paid By</InputLabel>
@@ -190,6 +244,7 @@ export const CostItemsPage: React.FC = () => {
               color="primary"
               aria-label="add"
               onClick={() => handleAddItem()}
+              ref={addButtonRef}
             >
               <AddIcon />
             </Fab>
@@ -270,7 +325,7 @@ export const CostItemsPage: React.FC = () => {
               height: "50px", // Set the height
               marginTop: "20px",
             }}
-            onClick={() => navigateBack()}
+            onClick={items.length > 0 ? handleClickOpen : navigateBack}
           >
             BACK
           </Button>
@@ -291,6 +346,19 @@ export const CostItemsPage: React.FC = () => {
           </Button>
         </ButtonGroupWrapper>
         <SiteFooter />
+        <ResponsiveDialog
+          title="Are You Sure You Want to Go Back?"
+          description="If you go back, any cost items created on this page will be lost. Do you want to continue?"
+          fullScreen={false}
+          open={open}
+          handleClose={handleClose}
+          showContinueButton
+          handleContinue={() => {
+            dispatch(removeItem());
+            navigateBack();
+          }}
+          CloseButtonName="No"
+        />
       </CostItemsPageWrapper>
     </>
   );
