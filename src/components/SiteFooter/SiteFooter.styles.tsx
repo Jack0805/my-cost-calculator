@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SiteFooterWrapper = styled.div`
-  height: 50px;
+  height: 5vh;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

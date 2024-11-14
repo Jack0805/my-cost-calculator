@@ -14,3 +14,11 @@ export const ButtonGroupWrapper = styled.div`
   align-items: center;
   width: 90%;
 `;
+
+export const PaperHeaderWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;

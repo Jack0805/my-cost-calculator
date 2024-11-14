@@ -5,7 +5,10 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import { GroupMemberPageWrapper } from "./GroupMember.styles";
-import { ButtonGroupWrapper } from "../../utils/Global.styles";
+import {
+  ButtonGroupWrapper,
+  PaperHeaderWrapper,
+} from "../../utils/Global.styles";
 import { stringAvatar, capitalizeFirstChar } from "../../utils/helpers";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -16,6 +19,7 @@ import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { CustomizedSteppers } from "../../components";
 import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
@@ -97,13 +101,27 @@ export const GroupMemberPage: React.FC = () => {
       </Alert> */}
       <Paper
         sx={{
-          height: "40vh",
-          width: "80%",
-          padding: "25px",
+          height: "60vh",
+          width: "85%",
+          padding: "15px",
           overflowY: "auto",
         }}
         elevation={3}
       >
+        <PaperHeaderWrapper>
+          <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
+            Step 1. Add Participants
+          </Typography>
+          <Fab
+            size="small"
+            color="primary"
+            aria-label="add"
+            onClick={() => handleAddName()}
+            ref={addButtonRef}
+          >
+            <AddIcon />
+          </Fab>
+        </PaperHeaderWrapper>
         <Box
           component="form"
           noValidate
@@ -114,6 +132,7 @@ export const GroupMemberPage: React.FC = () => {
           }}
         >
           <TextField
+            size="small"
             id="outlined-basic"
             label="Person Name"
             variant="outlined"
@@ -126,14 +145,15 @@ export const GroupMemberPage: React.FC = () => {
             error={error}
             helperText={error ? "The field cannot be empty" : ""}
           />
-          <Fab
+          {/* <Fab
+            size="small"
             color="primary"
             aria-label="add"
             onClick={() => handleAddName()}
             ref={addButtonRef}
           >
             <AddIcon />
-          </Fab>
+          </Fab> */}
         </Box>
         <Stack
           direction="row"

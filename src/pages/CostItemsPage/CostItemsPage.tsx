@@ -28,7 +28,10 @@ import {
   updateItem,
   updateExpand,
 } from "../../store/costItemsSlice";
-import { ButtonGroupWrapper } from "../../utils/Global.styles";
+import {
+  ButtonGroupWrapper,
+  PaperHeaderWrapper,
+} from "../../utils/Global.styles";
 import { useState, useRef, useEffect } from "react";
 
 import Accordion, { AccordionSlots } from "@mui/material/Accordion";
@@ -167,9 +170,9 @@ export const CostItemsPage: React.FC = () => {
         <CustomizedSteppers currentStep={1} />
         <Paper
           sx={{
-            height: "40vh",
-            width: "80%",
-            padding: "25px",
+            height: "60vh",
+            width: "85%",
+            padding: "15px",
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
@@ -177,17 +180,36 @@ export const CostItemsPage: React.FC = () => {
           }}
           elevation={3}
         >
+          <PaperHeaderWrapper>
+            <Typography
+              variant="overline"
+              gutterBottom
+              sx={{ display: "block" }}
+            >
+              Step 2. Add Costs
+            </Typography>
+            <Fab
+              size="small"
+              color="primary"
+              aria-label="add"
+              onClick={() => handleAddItem()}
+              ref={addButtonRef}
+            >
+              <AddIcon />
+            </Fab>
+          </PaperHeaderWrapper>
           <Box
             component="form"
             noValidate
             autoComplete="off"
             sx={{
               display: "flex",
-              gap: "10px",
+              justifyContent: "space-between",
             }}
           >
             <label htmlFor="bill_name_input" />
             <TextField
+              size="small"
               id="bill_name_input"
               name="billName"
               label="Bill Name"
@@ -196,13 +218,14 @@ export const CostItemsPage: React.FC = () => {
               onChange={handleItemChange}
               inputRef={itemInputRef}
               sx={{
-                width: "20%",
+                width: "33%",
               }}
               error={errorItem}
               helperText={errorItem ? "The field cannot be empty" : ""}
             />
             <label htmlFor="amount_input" />
             <TextField
+              size="small"
               id="amount_input"
               name="amount"
               label="Amount"
@@ -216,14 +239,19 @@ export const CostItemsPage: React.FC = () => {
                 ),
               }}
               sx={{
-                width: "20%",
+                width: "33%",
               }}
               error={errorAmount}
               helperText={errorAmount ? "The field cannot be empty" : ""}
             />
-            <FormControl>
+            <FormControl
+              sx={{
+                width: "33%",
+              }}
+            >
               <InputLabel id="select-paid-by">Paid By</InputLabel>
               <Select
+                size="small"
                 labelId="select-paid-by"
                 id="demo-simple-select"
                 name="simple-select"
@@ -240,14 +268,14 @@ export const CostItemsPage: React.FC = () => {
                 })}
               </Select>
             </FormControl>
-            <Fab
+            {/* <Fab
               color="primary"
               aria-label="add"
               onClick={() => handleAddItem()}
               ref={addButtonRef}
             >
               <AddIcon />
-            </Fab>
+            </Fab> */}
           </Box>
           {items.map((item, itemIndex) => {
             return (
@@ -342,7 +370,7 @@ export const CostItemsPage: React.FC = () => {
               navigateToCalculationPage();
             }}
           >
-            CALCULATE
+            NEXT
           </Button>
         </ButtonGroupWrapper>
         <SiteFooter />

@@ -5,8 +5,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Check from "@mui/icons-material/Check";
-import SettingsIcon from "@mui/icons-material/Settings";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import PaymentsIcon from "@mui/icons-material/Payments";
 import VideoLabelIcon from "@mui/icons-material/VideoLabel";
 import StepConnector, {
   stepConnectorClasses,
@@ -89,9 +90,6 @@ function QontoStepIcon(props: StepIconProps) {
 }
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
-  [`&.${stepConnectorClasses.alternativeLabel}`]: {
-    top: 22,
-  },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       backgroundImage:
@@ -121,8 +119,8 @@ const ColorlibStepIconRoot = styled("div")<{
   backgroundColor: "#ccc",
   zIndex: 1,
   color: "#fff",
-  width: 50,
-  height: 50,
+  width: 30,
+  height: 30,
   display: "flex",
   borderRadius: "50%",
   justifyContent: "center",
@@ -153,9 +151,9 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;
 
   const icons: { [index: string]: React.ReactElement<unknown> } = {
-    1: <SettingsIcon />,
-    2: <GroupAddIcon />,
-    3: <VideoLabelIcon />,
+    1: <GroupAddIcon style={{ fontSize: "16px" }} />,
+    2: <PaymentsIcon style={{ fontSize: "16px" }} />,
+    3: <AttachMoneyIcon style={{ fontSize: "16px" }} />,
   };
 
   return (
@@ -168,11 +166,7 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = [
-  "Add the number of participants.",
-  "Enter your total expenses.",
-  "Get instant share cost results.",
-];
+const steps = ["Participants", "Expenses", "Results"];
 
 export function CustomizedSteppers({ currentStep }: StepperProps) {
   return (
@@ -184,7 +178,7 @@ export function CustomizedSteppers({ currentStep }: StepperProps) {
       >
         {steps.map((label) => (
           <Step key={label}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+            <StepLabel StepIconComponent={ColorlibStepIcon}></StepLabel>
           </Step>
         ))}
       </Stepper>

@@ -77,7 +77,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         </TableCell> */}
         <TableCell component="th" scope="row">
           <IconButton aria-label="expand row" size="small">
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {/* {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} */}
           </IconButton>
           {row.name}
         </TableCell>
@@ -158,15 +158,15 @@ export const CalculationPage: React.FC = () => {
     <CalculationPageWrapper>
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
-      <Alert severity="info" sx={{ width: "80%" }}>
-        In each row, the person in the "Payer" column should pay each person in
-        the right columns the specified amount shown below their names.
-      </Alert>
+      {/* <Alert severity="info" sx={{ width: "80%" }}>
+        In each row, the "Payer" pays each person to the right the amount shown
+        below their names.
+      </Alert> */}
       <Paper
         sx={{
-          height: "40vh",
-          width: "80%",
-          padding: "25px",
+          height: "60vh",
+          width: "85%",
+          padding: "15px",
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
@@ -174,6 +174,9 @@ export const CalculationPage: React.FC = () => {
         }}
         elevation={3}
       >
+        <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
+          Step 3. Payer owes each person the amounts listed
+        </Typography>
         <TableContainer
           component={Paper}
           sx={{
@@ -182,13 +185,18 @@ export const CalculationPage: React.FC = () => {
         >
           <Table aria-label="collapsible table" stickyHeader>
             <TableHead>
-              <TableRow sx={{ height: "10px" }}>
-                <TableCell padding="none" align="center">
+              <TableRow sx={{ height: "10px", width: "33%" }}>
+                <TableCell padding="none" align="center" sx={{ width: "45%" }}>
                   Payer
                 </TableCell>
                 {names.map((name) => {
                   return (
-                    <TableCell padding="none" key={uniqid()} align="center">
+                    <TableCell
+                      padding="none"
+                      key={uniqid()}
+                      sx={{ minWidth: "33%" }}
+                      align="center"
+                    >
                       {name}
                     </TableCell>
                   );
