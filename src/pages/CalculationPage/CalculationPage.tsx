@@ -159,7 +159,7 @@ export const CalculationPage: React.FC = () => {
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
       <Alert severity="info" sx={{ width: "80%" }}>
-        In each row, the person in the "Payee" column should pay each person in
+        In each row, the person in the "Payer" column should pay each person in
         the right columns the specified amount shown below their names.
       </Alert>
       <Paper
@@ -184,7 +184,7 @@ export const CalculationPage: React.FC = () => {
             <TableHead>
               <TableRow sx={{ height: "10px" }}>
                 <TableCell padding="none" align="center">
-                  Payee
+                  Payer
                 </TableCell>
                 {names.map((name) => {
                   return (

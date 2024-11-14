@@ -169,9 +169,9 @@ function ColorlibStepIcon(props: StepIconProps) {
 }
 
 const steps = [
-  "Enter Members to Split Bills",
-  "Input Bills and Select Participants for Sharing",
-  "View Your Share Costs: Who owes What",
+  "Add the number of participants.",
+  "Enter your total expenses.",
+  "Get instant share cost results.",
 ];
 
 export function CustomizedSteppers({ currentStep }: StepperProps) {
