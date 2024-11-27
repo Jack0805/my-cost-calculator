@@ -23,10 +23,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Chip } from "@mui/material";
-import Alert from "@mui/material/Alert";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
@@ -36,6 +33,7 @@ import { removeItem } from "../../store/costItemsSlice";
 import { removeMember } from "../../store/groupMembersSlice";
 
 import { ResponsiveDialog } from "../../components/";
+import { Helmet } from "react-helmet";
 
 function createData(
   name: string,
@@ -66,15 +64,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         }}
         onClick={() => setOpen(!open)}
       >
-        {/* <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell> */}
         <TableCell component="th" scope="row">
           <IconButton aria-label="expand row" size="small">
             {/* {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} */}
@@ -156,12 +145,21 @@ export const CalculationPage: React.FC = () => {
 
   return (
     <CalculationPageWrapper>
+      <Helmet>
+        <title>Bill Split Results | Fair Expense Sharing</title>
+        <meta
+          name="description"
+          content="View the results of your group expense split. See who owes whom and how much with accurate calculations."
+        />
+        <meta
+          name="keywords"
+          content="bill split results, shared expenses, group costs, expense calculations"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://billsplit.io/#/calculation" />
+      </Helmet>
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
-      {/* <Alert severity="info" sx={{ width: "80%" }}>
-        In each row, the "Payer" pays each person to the right the amount shown
-        below their names.
-      </Alert> */}
       <Paper
         sx={{
           height: "60vh",
@@ -221,6 +219,7 @@ export const CalculationPage: React.FC = () => {
             marginTop: "20px",
           }}
           onClick={() => navigateBack()}
+          aria-label="Start Splitting Bills"
         >
           BACK
         </Button>
@@ -232,6 +231,7 @@ export const CalculationPage: React.FC = () => {
           }}
           autoFocus
           onClick={handleClickOpen}
+          aria-label="Start Splitting Bills"
         >
           Reset
         </Button>

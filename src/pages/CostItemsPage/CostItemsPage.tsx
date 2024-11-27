@@ -44,15 +44,13 @@ import { Chip, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Fade from "@mui/material/Fade";
 import Collapse from "@mui/material/Collapse";
-import Grow from "@mui/material/Grow";
-import Tooltip from "@mui/material/Tooltip";
 
 import { ResponsiveDialog } from "../../components/";
 
 import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
+import { Helmet } from "react-helmet";
 
 export const CostItemsPage: React.FC = () => {
   const { navigateBack, navigateToCalculationPage } = useNavigateTo();
@@ -166,6 +164,19 @@ export const CostItemsPage: React.FC = () => {
   return (
     <>
       <CostItemsPageWrapper>
+        <Helmet>
+          <title>Add Costs and Expenses | Bill Split</title>
+          <meta
+            name="description"
+            content="Add shared costs and expenses for your group. Enter item details to calculate and split bills fairly among members."
+          />
+          <meta
+            name="keywords"
+            content="add expenses, split costs, shared bills, group expenses"
+          />
+          <meta name="robots" content="index, follow" />
+          <link rel="canonical" href="https://billsplit.io/#/cost-items" />
+        </Helmet>
         <SiteHeader />
         <CustomizedSteppers currentStep={1} />
         <Paper
@@ -191,7 +202,7 @@ export const CostItemsPage: React.FC = () => {
             <Fab
               size="small"
               color="primary"
-              aria-label="add"
+              aria-label="Start Splitting Bills"
               onClick={() => handleAddItem()}
               ref={addButtonRef}
             >
@@ -268,14 +279,6 @@ export const CostItemsPage: React.FC = () => {
                 })}
               </Select>
             </FormControl>
-            {/* <Fab
-              color="primary"
-              aria-label="add"
-              onClick={() => handleAddItem()}
-              ref={addButtonRef}
-            >
-              <AddIcon />
-            </Fab> */}
           </Box>
           {items.map((item, itemIndex) => {
             return (
@@ -334,7 +337,7 @@ export const CostItemsPage: React.FC = () => {
                 </Accordion>
                 <IconButton
                   color="error"
-                  aria-label="add"
+                  aria-label="Start Splitting Bills"
                   size="small"
                   onClick={() => handleRemoveItem(itemIndex)}
                 >
@@ -354,6 +357,7 @@ export const CostItemsPage: React.FC = () => {
               marginTop: "20px",
             }}
             onClick={items.length > 0 ? handleClickOpen : navigateBack}
+            aria-label="Start Splitting Bills"
           >
             BACK
           </Button>
@@ -369,6 +373,7 @@ export const CostItemsPage: React.FC = () => {
             onClick={() => {
               navigateToCalculationPage();
             }}
+            aria-label="Start Splitting Bills"
           >
             NEXT
           </Button>

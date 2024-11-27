@@ -28,7 +28,7 @@ const usePageTracking = () => {
   }, [location]);
 };
 
-const App_Routes: React.FC = () => {
+const AppRoutes: React.FC = () => {
   useEffect(() => {
     ReactGA.initialize(TRACKING_ID); // Initialize Google Analytics
   }, []);
@@ -43,4 +43,4 @@ const App_Routes: React.FC = () => {
   );
 };
 
-export default App_Routes;
+export default AppRoutes;

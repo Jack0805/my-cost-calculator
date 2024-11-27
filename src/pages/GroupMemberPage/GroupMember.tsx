@@ -25,6 +25,7 @@ import uniqid from "uniqid";
 import { SiteHeader, SiteFooter } from "../../components";
 
 import { ResponsiveDialog } from "../../components/";
+import { Helmet } from "react-helmet";
 
 export const GroupMemberPage: React.FC = () => {
   const { navigateToCostItemsPage, navigateBack } = useNavigateTo();
@@ -55,10 +56,6 @@ export const GroupMemberPage: React.FC = () => {
       dispatch(addMember(capitalizeFirstChar(inputValue)));
     }
   };
-
-  // const handleRemoveName = () => {
-  //   dispatch(removeMember());
-  // };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // Update state with input value
@@ -93,12 +90,21 @@ export const GroupMemberPage: React.FC = () => {
 
   return (
     <GroupMemberPageWrapper>
+      <Helmet>
+        <title>Add Group Members | Bill Split</title>
+        <meta
+          name="description"
+          content="Add group members to start splitting expenses fairly. Create a group for your event, trip, or party effortlessly."
+        />
+        <meta
+          name="keywords"
+          content="add group members, group expenses, shared costs, event expenses"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://billsplit.io/#/group-member" />
+      </Helmet>
       <SiteHeader />
       <CustomizedSteppers currentStep={0} />
-      {/* <Alert severity="error" sx={{ width: "80%" }}>
-        In each row, the person in the leftmost column should pay the shared
-        costs to the people in the columns to the right.
-      </Alert> */}
       <Paper
         sx={{
           height: "60vh",
@@ -115,7 +121,7 @@ export const GroupMemberPage: React.FC = () => {
           <Fab
             size="small"
             color="primary"
-            aria-label="add"
+            aria-label="Start Splitting Bills"
             onClick={() => handleAddName()}
             ref={addButtonRef}
           >
@@ -188,6 +194,7 @@ export const GroupMemberPage: React.FC = () => {
             marginTop: "20px",
           }}
           onClick={() => navigateBack()}
+          aria-label="Start Splitting Bills"
         >
           BACK
         </Button>
@@ -201,6 +208,7 @@ export const GroupMemberPage: React.FC = () => {
             marginTop: "20px",
           }}
           onClick={() => navigateToCostItemsPage()}
+          aria-label="Start Splitting Bills"
         >
           NEXT
         </Button>
