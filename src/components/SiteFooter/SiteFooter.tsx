@@ -1,11 +1,16 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import { useNavigateTo } from "../../hooks/";
 import { SiteFooterWrapper } from "./index";
+import Typography from "@mui/material/Typography";
 
 export const SiteFooter: React.FC = () => {
-  const { navigateToGroupMemberPage } = useNavigateTo();
-
-  return <SiteFooterWrapper></SiteFooterWrapper>;
+  const currentYear = new Date().getFullYear();
+  return (
+    <SiteFooterWrapper>
+      <footer>
+        <Typography>
+          Copyright © {currentYear} Bill Split. All Rights Reserved.
+        </Typography>
+      </footer>
+    </SiteFooterWrapper>
+  );
 };

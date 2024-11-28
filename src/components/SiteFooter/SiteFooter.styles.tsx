@@ -4,8 +4,8 @@ export const SiteFooterWrapper = styled.div`
   height: 5vh;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   border-top: 2px solid black;
   width: 100vw;
 `;

@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import { GroupMemberPageWrapper } from "./GroupMember.styles";
 import {

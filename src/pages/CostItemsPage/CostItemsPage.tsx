@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import {
   CostItemsPageWrapper,
@@ -35,7 +34,6 @@ import {
 import { useState, useRef, useEffect } from "react";
 
 import Accordion, { AccordionSlots } from "@mui/material/Accordion";
-// import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
