@@ -13,7 +13,14 @@ import {
   CardWrapper,
   ImageWrapper,
 } from "./index";
-import landingPageImage from "../../assets/images/landing-page-image.webp";
+
+import billSplittingAppDiscussion from "../../assets/images/bill-splitting-app-discussion.webp";
+import splitBillsGroupExpenses from "../../assets/images/split-bills-group-expenses.webp";
+import friendlyBillSharingApp from "../../assets/images/friendly-bill-sharing-app.webp";
+import teamBillSplittingSolution from "../../assets/images/team-bill-splitting-solution.webp";
+import groupExpenseManagementApp from "../../assets/images/group-expense-management-app.webp";
+import modernBillSharingIllustration from "../../assets/images/modern-bill-sharing-illustration.webp";
+import splitBillWebTool from "../../assets/images/split-bill-web-tool.webp";
 
 import { Helmet } from "react-helmet";
 
@@ -24,6 +31,31 @@ export const LandingPage: React.FC = () => {
   const { navigateToGroupMemberPage } = useNavigateTo();
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+
+  const images = [
+    billSplittingAppDiscussion,
+    splitBillsGroupExpenses,
+    friendlyBillSharingApp,
+    teamBillSplittingSolution,
+    groupExpenseManagementApp,
+    modernBillSharingIllustration,
+    splitBillWebTool,
+  ];
+
+  const altTexts = [
+    "Group discussing a bill-splitting app",
+    "Splitting group expenses using a mobile app",
+    "Friendly collaboration for bill sharing",
+    "Team using a solution for splitting bills",
+    "Managing group expenses easily",
+    "Modern illustration of a bill-sharing app",
+    "Simple Split bill web app",
+  ];
+
+  const randomIndex = Math.floor(Math.random() * images.length);
+  const selectedImage = images[randomIndex];
+  const selectedAltText = altTexts[randomIndex];
+
   return (
     <LandingPageWrapper>
       <Helmet>
@@ -77,9 +109,11 @@ export const LandingPage: React.FC = () => {
         </CardWrapper>
         <ImageWrapper>
           <img
-            src={landingPageImage}
-            alt="Illustration of people splitting bills"
+            src={selectedImage}
+            alt={selectedAltText}
+            title={selectedAltText}
             style={{ width: "100%", height: "auto", margin: "20px 0" }}
+            loading="lazy"
           />
         </ImageWrapper>
       </LandingContentWrapper>
