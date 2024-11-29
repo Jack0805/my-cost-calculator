@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -34,6 +34,9 @@ import { removeMember } from "../../store/groupMembersSlice";
 
 import { ResponsiveDialog } from "../../components/";
 import { Helmet } from "react-helmet";
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function createData(
   name: string,
@@ -143,6 +146,82 @@ export const CalculationPage: React.FC = () => {
     setOpen(false);
   };
 
+  const tableRef = useRef<HTMLDivElement>(null); // Use a type-safe ref for the table
+
+  const generatePDF = async () => {
+    if (!tableRef.current) return;
+
+    try {
+      const originalOverflow = tableRef.current.style.overflow;
+      const originalWidth = tableRef.current.style.width;
+      const originalHeight = tableRef.current.style.height;
+      tableRef.current.style.width = "1920px";
+      tableRef.current.style.height = "5000px";
+      tableRef.current.style.overflow = "visible";
+
+      const canvas = await html2canvas(tableRef.current, {
+        scrollY: -window.scrollY,
+        scrollX: -window.scrollX,
+        scale: 2,
+      });
+
+      tableRef.current.style.width = originalWidth;
+      tableRef.current.style.height = originalHeight;
+      tableRef.current.style.overflow = originalOverflow;
+
+      const pdf = new jsPDF("landscape");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      const widthRatio = pdfWidth / imgWidth;
+      const heightRatio = pdfHeight / imgHeight;
+      const ratio = Math.min(widthRatio, heightRatio);
+
+      const scaledWidth = imgWidth * ratio;
+      const scaledHeight = imgHeight * ratio;
+
+      const xOffset = 0;
+      const yOffset = 20;
+
+      // Add a title with the date
+      const now = new Date();
+      const resultDate = now.toLocaleDateString(); // Date in MM/DD/YYYY format (based on locale)
+      const resultTime = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }); // Time in HH:mm format
+      const title = `Bill Splitting Results - ${resultDate} ${resultTime}`;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text(title, pdfWidth / 2, 10, { align: "center" }); // Center the title
+
+      // Add explanatory text under the title
+      const explanation =
+        "This table shows the payment breakdown. Each row represents a payer and the amounts owed to others.";
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text(explanation, pdfWidth / 2, 16, { align: "center" }); // Center the explanation below the title
+
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        xOffset,
+        yOffset,
+        scaledWidth,
+        scaledHeight
+      );
+
+      const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
+      const fileName = `bill-split-${timestamp}.pdf`;
+      pdf.save(fileName);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
+
   return (
     <CalculationPageWrapper>
       <Helmet>
@@ -179,7 +258,9 @@ export const CalculationPage: React.FC = () => {
           component={Paper}
           sx={{
             "& > :not(style)": { m: 1 },
+            overflow: "auto",
           }}
+          ref={tableRef}
         >
           <Table aria-label="collapsible table" stickyHeader>
             <TableHead>
@@ -222,6 +303,19 @@ export const CalculationPage: React.FC = () => {
           aria-label="Start Splitting Bills"
         >
           BACK
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            width: "25%", // Set the width
+            height: "50px", // Set the height
+            marginTop: "20px",
+          }}
+          autoFocus
+          onClick={generatePDF}
+          aria-label="Start Splitting Bills"
+        >
+          Download PDF
         </Button>
         <Button
           sx={{

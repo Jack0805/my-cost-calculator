@@ -130,7 +130,6 @@ export const CostItemsPage: React.FC = () => {
   const handleChangeAccordionExpended =
     (itemIndex: number) =>
     (event: React.SyntheticEvent, isExpanded: boolean) => {
-      console.log(isExpanded);
       dispatch(
         updateExpand({
           itemIndex,

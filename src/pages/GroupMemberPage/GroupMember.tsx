@@ -150,15 +150,6 @@ export const GroupMemberPage: React.FC = () => {
             error={error}
             helperText={error ? "The field cannot be empty" : ""}
           />
-          {/* <Fab
-            size="small"
-            color="primary"
-            aria-label="add"
-            onClick={() => handleAddName()}
-            ref={addButtonRef}
-          >
-            <AddIcon />
-          </Fab> */}
         </Box>
         <Stack
           direction="row"
