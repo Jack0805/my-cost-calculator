@@ -12,27 +12,23 @@ import {
   CalculationPage,
 } from "./pages/"; // Your Home component
 import { ROUTE } from "./shared";
-import ReactGA from "react-ga4";
+import { initializeGA, trackPageView } from "./utils/analytics";
 
-const TRACKING_ID = "G-DCKDBTH135";
-
-// Custom hook to track page views
-const usePageTracking = () => {
+const AppRoutes: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    ReactGA.send({
-      hitType: "pageview",
-      page: location.pathname + location.search,
-    });
-  }, [location]);
-};
+    // Initialize Google Analytics when the app loads
+    initializeGA();
 
-const AppRoutes: React.FC = () => {
-  useEffect(() => {
-    ReactGA.initialize(TRACKING_ID); // Initialize Google Analytics
+    // Track the initial page view
+    trackPageView(location.pathname + location.search);
   }, []);
-  usePageTracking();
+
+  useEffect(() => {
+    // Track page views when the route changes
+    trackPageView(location.pathname + location.search);
+  }, [location]);
   return (
     <Routes>
       <Route path={ROUTE.LANDING_PAGE} element={<LandingPage />} />

@@ -38,6 +38,8 @@ import { Helmet } from "react-helmet";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
+import { trackEvent } from "../../utils/analytics";
+
 function createData(
   name: string,
   shallPayAmount: number[],
@@ -217,7 +219,13 @@ export const CalculationPage: React.FC = () => {
       const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
       const fileName = `bill-split-${timestamp}.pdf`;
       pdf.save(fileName);
+      const pdfDetails = {
+        file_name: fileName,
+        results: JSON.stringify(result), // File size in KB
+      };
+      trackEvent("click", "Button", "Download PDF Done", 1, pdfDetails);
     } catch (error) {
+      trackEvent("click", "Button", `Error generating PDF: ${error}`);
       console.error("Error generating PDF:", error);
     }
   };
