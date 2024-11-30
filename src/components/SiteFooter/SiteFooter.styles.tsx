@@ -8,4 +8,5 @@ export const SiteFooterWrapper = styled.div`
   align-items: center;
   border-top: 2px solid black;
   width: 100vw;
+  padding: 5px;
 `;

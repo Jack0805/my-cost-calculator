@@ -39,6 +39,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 import { trackEvent } from "../../utils/analytics";
+import { persistor } from "../../store/store";
 
 function createData(
   name: string,
@@ -355,6 +356,7 @@ export const CalculationPage: React.FC = () => {
         handleContinue={() => {
           dispatch(removeItem());
           dispatch(removeMember());
+          persistor.purge();
           navigateToLandingPage();
         }}
         CloseButtonName="No"

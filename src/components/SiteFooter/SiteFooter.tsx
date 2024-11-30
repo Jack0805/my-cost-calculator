@@ -1,5 +1,6 @@
 import React from "react";
 import { SiteFooterWrapper } from "./index";
+import { FooterModal } from "../PrivacyModal";
 import Typography from "@mui/material/Typography";
 
 export const SiteFooter: React.FC = () => {
@@ -7,7 +8,8 @@ export const SiteFooter: React.FC = () => {
   return (
     <SiteFooterWrapper>
       <footer>
-        <Typography>
+        <FooterModal />
+        <Typography sx={{ fontSize: "0.75rem" }}>
           Copyright © {currentYear} Bill Split. All Rights Reserved.
         </Typography>
       </footer>
