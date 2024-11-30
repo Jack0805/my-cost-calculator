@@ -18,11 +18,10 @@ export const trackEvent = (
   value?: number,
   data?: Record<string, any>
 ) => {
-  ReactGA.event({
-    action,
+  ReactGA.event(action, {
     category,
     label,
     value,
-    ...data,
+    ...(data || {}),
   });
 };

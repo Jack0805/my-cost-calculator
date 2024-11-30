@@ -218,7 +218,13 @@ export const CalculationPage: React.FC = () => {
 
       const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
       const fileName = `bill-split-${timestamp}.pdf`;
-      pdf.save(fileName);
+      // Instead of pdf.save(), use the following:
+      const blob = pdf.output("blob");
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
+      // Clean up the blob URL after a delay
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+      // pdf.save(fileName);
       const pdfDetails = {
         file_name: fileName,
         results: JSON.stringify(result), // File size in KB
