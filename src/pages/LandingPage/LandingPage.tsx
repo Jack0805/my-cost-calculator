@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigateTo } from "../../hooks/";
 
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
 
 import { SiteHeader, SiteFooter } from "../../components";
 import {
@@ -27,10 +28,31 @@ import { Helmet } from "react-helmet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { persistor } from "../../store/store";
+
+import { removeItem } from "../../store/costItemsSlice";
+import { removeMember } from "../../store/groupMembersSlice";
+import { ResponsiveDialog } from "../../components/";
+
 export const LandingPage: React.FC = () => {
   const { navigateToGroupMemberPage } = useNavigateTo();
+  const dispatch = useAppDispatch();
+  const [open, setOpen] = useState(false);
+  const names = useAppSelector((state) => state.groupMember.names);
+  const items = useAppSelector((state) => state.costItems.items);
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+
+  const hasData = names.length > 0 || items.length > 0;
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const images = [
     billSplittingAppDiscussion,
@@ -74,6 +96,12 @@ export const LandingPage: React.FC = () => {
       <SiteHeader />
       <LandingContentWrapper>
         <CardWrapper>
+          {hasData && (
+            <Alert variant="outlined" severity="success">
+              Your previous data is saved. Click 'Continue' to resume or 'Start
+              New Calculation' to clear the data and begin fresh.
+            </Alert>
+          )}
           <CardContent>
             <Typography
               gutterBottom
@@ -97,13 +125,26 @@ export const LandingPage: React.FC = () => {
             </Typography>
           </CardContent>
           <CardActions>
+            {hasData && (
+              <Button
+                aria-label={"Start Splitting Bills"}
+                variant="outlined"
+                color="primary"
+                onClick={() => navigateToGroupMemberPage()}
+              >
+                Continue
+              </Button>
+            )}
+
             <Button
               aria-label={"Start Splitting Bills"}
               variant="contained"
               color="primary"
-              onClick={() => navigateToGroupMemberPage()}
+              onClick={() =>
+                hasData ? handleClickOpen() : navigateToGroupMemberPage()
+              }
             >
-              Start Splitting Bills
+              Start New Calculation
             </Button>
           </CardActions>
         </CardWrapper>
@@ -118,6 +159,21 @@ export const LandingPage: React.FC = () => {
         </ImageWrapper>
       </LandingContentWrapper>
       <SiteFooter />
+      <ResponsiveDialog
+        title="Are You Sure You Want to Start a New Calculation?"
+        description="Starting a new calculation will permanently delete all your current data and it cannot be recovered. Please ensure you no longer need this data, or you can download the results as a PDF for your records before proceeding."
+        fullScreen={false}
+        open={open}
+        handleClose={handleClose}
+        showContinueButton
+        handleContinue={() => {
+          dispatch(removeItem());
+          dispatch(removeMember());
+          persistor.purge();
+          navigateToGroupMemberPage();
+        }}
+        CloseButtonName="No"
+      />
     </LandingPageWrapper>
   );
 };
