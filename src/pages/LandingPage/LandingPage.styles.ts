@@ -23,7 +23,7 @@ export const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 50%;
+  width: 40%;
   @media (max-width: 768px) {
     width: 80%;
   }
