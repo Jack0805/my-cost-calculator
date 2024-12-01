@@ -30,6 +30,15 @@ const AppRoutes: React.FC = () => {
     // Track page views when the route changes
     trackPageView(location.pathname + location.search);
   }, [location]);
+
+  // Check for `redirect` parameter in the query string
+  const redirectPath = new URLSearchParams(location.search).get("redirect");
+
+  if (redirectPath) {
+    // Render the PageNotFound component for redirected paths
+    return <PageNotFound />;
+  }
+
   return (
     <Routes>
       <Route path={ROUTE.LANDING_PAGE} element={<LandingPage />} />

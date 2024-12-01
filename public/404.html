@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="refresh" content="0; URL='/'" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found</title>
     <script>
-      // Preserve the path and reload the app
-      var redirectTo = window.location.pathname || "/";
-      window.location.replace(redirectTo);
+      // Redirect all undefined routes to the index.html for React to handle
+      window.location.replace(
+        "/?redirect=" + encodeURIComponent(window.location.pathname)
+      );
     </script>
   </head>
-  <body></body>
 </html>
