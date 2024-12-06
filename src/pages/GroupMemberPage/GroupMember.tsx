@@ -90,7 +90,7 @@ export const GroupMemberPage: React.FC = () => {
   return (
     <GroupMemberPageWrapper>
       <Helmet>
-        <title>Add Group Members | Bill Split</title>
+        <title>Bill Split: Add Group Members</title>
         <meta
           name="description"
           content="Add group members to start splitting expenses fairly. Create a group for your event, trip, or party effortlessly."

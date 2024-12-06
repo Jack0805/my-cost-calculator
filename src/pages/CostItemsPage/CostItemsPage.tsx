@@ -162,7 +162,7 @@ export const CostItemsPage: React.FC = () => {
     <>
       <CostItemsPageWrapper>
         <Helmet>
-          <title>Add Costs and Expenses | Bill Split</title>
+          <title>Bill Split: Add Costs and Expenses</title>
           <meta
             name="description"
             content="Add shared costs and expenses for your group. Enter item details to calculate and split bills fairly among members."
