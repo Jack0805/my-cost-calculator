@@ -81,11 +81,32 @@ export const LandingPage: React.FC = () => {
   return (
     <LandingPageWrapper>
       <Helmet>
-        <title>Split Bills Effortlessly | Bill Split</title>
+        <title>Bill Split: Split Bills Effortlessly</title>
         <meta
           name="description"
           content="Simplify group expenses with Bill Split. Easily divide costs, track spending, and ensure fair sharing among friends and family."
         />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            name: "Bill Split",
+            url: "https://billsplit.io",
+            description:
+              "Split bills easily and manage group expenses effortlessly with Bill Split.",
+            applicationCategory: "FinanceApplication",
+            operatingSystem: "All",
+            author: {
+              "@type": "Organization",
+              name: "Bill Split Team",
+            },
+            offers: {
+              "@type": "Offer",
+              price: "0.00",
+              priceCurrency: "USD",
+            },
+          })}
+        </script>
         <meta
           name="keywords"
           content="split bills, group expenses, bill calculator, shared expenses"

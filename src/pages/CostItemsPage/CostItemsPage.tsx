@@ -167,6 +167,16 @@ export const CostItemsPage: React.FC = () => {
             name="description"
             content="Add shared costs and expenses for your group. Enter item details to calculate and split bills fairly among members."
           />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              name: "Add Cost Items",
+              url: "https://billsplit.io/cost-items",
+              description:
+                "Add shared cost items to your session. Easily track expenses and contributions for fair bill splitting.",
+            })}
+          </script>
           <meta
             name="keywords"
             content="add expenses, split costs, shared bills, group expenses"

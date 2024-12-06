@@ -245,6 +245,16 @@ export const CalculationPage: React.FC = () => {
           name="description"
           content="View the results of your group expense split. See who owes whom and how much with accurate calculations."
         />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Calculation Results",
+            url: "https://billsplit.io/calculation",
+            description:
+              "View the final calculation results for your bill-splitting session. See who owes whom and how much.",
+          })}
+        </script>
         <meta
           name="keywords"
           content="bill split results, shared expenses, group costs, expense calculations"

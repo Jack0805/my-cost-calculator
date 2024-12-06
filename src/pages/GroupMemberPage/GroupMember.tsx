@@ -95,6 +95,16 @@ export const GroupMemberPage: React.FC = () => {
           name="description"
           content="Add group members to start splitting expenses fairly. Create a group for your event, trip, or party effortlessly."
         />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Add Members",
+            url: "https://billsplit.io/group-member",
+            description:
+              "Add group members to your bill-splitting session. Start managing shared expenses easily with Bill Split.",
+          })}
+        </script>
         <meta
           name="keywords"
           content="add group members, group expenses, shared costs, event expenses"
