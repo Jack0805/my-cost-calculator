@@ -4,6 +4,8 @@ import {
   CostItem,
   EditItemTypePayload,
   EditItemExpendedTypePayload,
+  EditItemEqualSplitPayload,
+  EditPortionPayload,
 } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -16,7 +18,7 @@ const costItemsSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<CostItem>) {
-      state.items.push(action.payload); // Add the new item
+      state.items.unshift(action.payload); // Add the new item
     },
     removeItem(state) {
       state.items = []; // Remove item by index
@@ -33,6 +35,15 @@ const costItemsSlice = createSlice({
       state.items[action.payload.itemIndex].accordionExpended =
         action.payload.expanded;
     },
+    updateEqualSplit(state, action: PayloadAction<EditItemEqualSplitPayload>) {
+      state.items[action.payload.itemIndex].equalSplit =
+        action.payload.equalSplit;
+    },
+    updatePortion(state, action: PayloadAction<EditPortionPayload>) {
+      state.items[action.payload.itemIndex].shareBy[
+        action.payload.shareByIndex
+      ].portion = action.payload.portion as number;
+    },
   },
 });
 
@@ -42,6 +53,8 @@ export const {
   removeSpecificItem,
   updateItem,
   updateExpand,
+  updateEqualSplit,
+  updatePortion,
 } = costItemsSlice.actions;
 
 export default costItemsSlice.reducer;

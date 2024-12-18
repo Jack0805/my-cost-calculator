@@ -26,6 +26,8 @@ import {
   removeSpecificItem,
   updateItem,
   updateExpand,
+  updateEqualSplit,
+  updatePortion,
 } from "../../store/costItemsSlice";
 import {
   ButtonGroupWrapper,
@@ -45,9 +47,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Collapse from "@mui/material/Collapse";
 
 import { ResponsiveDialog } from "../../components/";
+import { CostItem } from "../../store/types";
 
 import uniqid from "uniqid";
-import { SiteHeader, SiteFooter } from "../../components";
+import { SiteHeader, SiteFooter, ToggleButtons } from "../../components";
 import { Helmet } from "react-helmet";
 
 export const CostItemsPage: React.FC = () => {
@@ -63,6 +66,15 @@ export const CostItemsPage: React.FC = () => {
 
   const [errorItem, setErrorItem] = useState(false);
   const [errorAmount, setErrorAmount] = useState(false);
+
+  const handleChangeAlignment = (newAlignment: string, itemIndex: number) => {
+    dispatch(
+      updateEqualSplit({
+        itemIndex,
+        equalSplit: newAlignment,
+      })
+    );
+  };
 
   const [open, setOpen] = useState(false);
 
@@ -80,15 +92,33 @@ export const CostItemsPage: React.FC = () => {
       setErrorItem(false); // Remove error when user starts typing
     }
   };
+
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputAmountValue(event.target.value as unknown as number); // Update state with input value
     if (errorAmount && event.target.value) {
       setErrorAmount(false); // Remove error when user starts typing
     }
   };
+
+  const handlePortionAmountChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    itemIndex: number,
+    shareByIndex: number
+  ) => {
+    const newPortion = Number(event.target.value);
+    dispatch(
+      updatePortion({
+        itemIndex,
+        shareByIndex,
+        portion: newPortion,
+      })
+    );
+  };
+
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value as string);
   };
+
   const handleAddItem = () => {
     if (!inputItemValue.trim() && !inputAmountValue) {
       setErrorItem(true);
@@ -107,24 +137,34 @@ export const CostItemsPage: React.FC = () => {
         addItem({
           itemName: inputItemValue,
           amount: inputAmountValue as number,
-          shareBy: convertArray(names),
+          shareBy: convertArray(names, inputAmountValue as number),
           paidBy: selectedValue,
           accordionExpended: true,
+          equalSplit: "equal",
         })
       );
     }
   };
+
   const handleRemoveItem = (index: number) => {
     dispatch(removeSpecificItem(index));
   };
+
   const handleEditSharedBy = (itemIndex: number, shareByIndex: number) => {
-    dispatch(
-      updateItem({
-        itemIndex,
-        shareByIndex,
-        isShared: !items[itemIndex].shareBy[shareByIndex].isShared,
-      })
-    );
+    if (
+      items[itemIndex].shareBy.filter((item) => item.isShared).length === 1 &&
+      items[itemIndex].shareBy[shareByIndex].isShared === true
+    ) {
+      return;
+    } else {
+      dispatch(
+        updateItem({
+          itemIndex,
+          shareByIndex,
+          isShared: !items[itemIndex].shareBy[shareByIndex].isShared,
+        })
+      );
+    }
   };
 
   const handleChangeAccordionExpended =
@@ -157,6 +197,19 @@ export const CostItemsPage: React.FC = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const calculateTotalPortion = (item: CostItem) => {
+    const totalPortion = item.shareBy.reduce(
+      (total: number, share: { portion: number; isShared: boolean }) =>
+        share.isShared ? total + share.portion : total,
+      0
+    );
+    return totalPortion;
+  };
+
+  const isErrorChipVisible = (item: CostItem) =>
+    item.equalSplit === "unequal" &&
+    Math.abs(calculateTotalPortion(item) - Number(item.amount)) > 0.02;
 
   return (
     <>
@@ -288,12 +341,14 @@ export const CostItemsPage: React.FC = () => {
             </FormControl>
           </Box>
           {items.map((item, itemIndex) => {
+            const errorVisible = isErrorChipVisible(item);
             return (
-              <AccordionWrapper>
+              <AccordionWrapper key={uniqid()}>
                 <Accordion
                   key={uniqid()}
                   sx={{
                     width: "85%",
+                    // backgroundColor: "red",
                   }}
                   elevation={3}
                   expanded={item.accordionExpended}
@@ -315,7 +370,27 @@ export const CostItemsPage: React.FC = () => {
                         }
                         color="success"
                         variant="outlined"
+                        sx={{
+                          "& .MuiChip-label": {
+                            fontSize: "11px", // Adjust the font size here
+                          },
+                        }}
                       />
+                      {errorVisible && (
+                        <Chip
+                          label={
+                            <strong>Amounts must match the bill total</strong>
+                          }
+                          color="error"
+                          variant="outlined"
+                          data-testid={`error-chip-${itemIndex}`}
+                          sx={{
+                            "& .MuiChip-label": {
+                              fontSize: "11px", // Adjust the font size here
+                            },
+                          }}
+                        />
+                      )}
                     </ItemTitleWrapper>
                   </AccordionSummary>
                   <AccordionDetails>
@@ -325,21 +400,72 @@ export const CostItemsPage: React.FC = () => {
                       sx={{
                         flexWrap: "wrap",
                         gap: "10px", // Allow items to wrap to the next line
+                        marginBottom: "15px",
                       }}
                     >
-                      {item.shareBy.map((shareBy, shareByIndex) => {
-                        return (
+                      {item.equalSplit === "equal" &&
+                        item.shareBy.map((shareBy, shareByIndex) => (
                           <Chip
                             label={shareBy.name}
                             color={shareBy.isShared ? "primary" : "default"}
                             key={uniqid()}
-                            onClick={() => {
-                              handleEditSharedBy(itemIndex, shareByIndex);
-                            }}
+                            onClick={() =>
+                              handleEditSharedBy(itemIndex, shareByIndex)
+                            }
                           />
-                        );
-                      })}
+                        ))}
+
+                      {item.equalSplit === "unequal" &&
+                        item.shareBy.map((shareBy, shareByIndex) => (
+                          <TextField
+                            id="input-with-icon-textfield"
+                            key={uniqid()}
+                            sx={{ width: "170px" }}
+                            disabled={!shareBy.isShared}
+                            type="number"
+                            defaultValue={shareBy.portion}
+                            onBlur={(event) =>
+                              handlePortionAmountChange(
+                                event,
+                                itemIndex,
+                                shareByIndex
+                              )
+                            }
+                            slotProps={{
+                              input: {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <Chip
+                                      label={shareBy.name}
+                                      sx={{
+                                        marginBottom: "5px",
+                                        marginRight: "5px",
+                                      }}
+                                      color={
+                                        shareBy.isShared ? "primary" : "default"
+                                      }
+                                      key={uniqid()}
+                                      onClick={() =>
+                                        handleEditSharedBy(
+                                          itemIndex,
+                                          shareByIndex
+                                        )
+                                      }
+                                    />
+                                    $
+                                  </InputAdornment>
+                                ),
+                              },
+                            }}
+                            variant="standard"
+                          />
+                        ))}
                     </Stack>
+                    <ToggleButtons
+                      alignment={item.equalSplit}
+                      itemIndex={itemIndex}
+                      handleChangeAlignment={handleChangeAlignment}
+                    />
                   </AccordionDetails>
                 </Accordion>
                 <IconButton
@@ -369,7 +495,10 @@ export const CostItemsPage: React.FC = () => {
             BACK
           </Button>
           <Button
-            disabled={items.length <= 0}
+            disabled={
+              items.length <= 0 ||
+              items.some((item) => isErrorChipVisible(item))
+            }
             variant="contained"
             color="primary"
             sx={{

@@ -10,9 +10,10 @@ export const CostItemsPageWrapper = styled.div`
 
 export const ItemTitleWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  row-gap: 10px;
 `;
 
 export const AccordionWrapper = styled.div`

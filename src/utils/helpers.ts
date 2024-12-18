@@ -45,8 +45,15 @@ function capitalizeFirstChar(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const convertArray = (arr: string[]): { name: string; isShared: boolean }[] => {
-  return arr.map((name) => ({ name, isShared: true }));
+const convertArray = (
+  arr: string[],
+  totalAmount: number
+): { name: string; isShared: boolean; portion: number }[] => {
+  return arr.map((name) => ({
+    name,
+    isShared: true,
+    portion: Number((totalAmount / arr.length).toFixed(2)),
+  }));
 };
 
 interface Debt {
@@ -70,14 +77,17 @@ function calculateDetailedDebts(participants: CostItem[]): Debt[] {
   // Step 1: Collect all individual debts
   participants.forEach((payer) => {
     const totalAmount = payer.amount || 0;
-
     const sharePerPerson = totalAmount / payer.shareBy.length;
 
     payer.shareBy.forEach((participant) => {
       debts.push({
         from: participant.name,
         to: payer.paidBy,
-        amount: parseFloat(sharePerPerson.toFixed(2)), // Round to 2 decimals
+        amount: parseFloat(
+          payer.equalSplit === "equal"
+            ? sharePerPerson.toFixed(2)
+            : participant.portion.toFixed(2)
+        ), // Round to 2 decimals
       });
     });
   });

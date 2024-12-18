@@ -13,6 +13,7 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
+import uniqid from "uniqid";
 
 interface StepperProps {
   currentStep: number;
@@ -177,7 +178,7 @@ export function CustomizedSteppers({ currentStep }: StepperProps) {
         connector={<ColorlibConnector />}
       >
         {steps.map((label) => (
-          <Step key={label}>
+          <Step key={uniqid()}>
             <StepLabel StepIconComponent={ColorlibStepIcon}></StepLabel>
           </Step>
         ))}

@@ -2,9 +2,10 @@ export interface GroupMemberInitialState {
   names: string[];
 }
 
-type ShareBy = {
+export type ShareBy = {
   name: string;
   isShared: boolean;
+  portion: number;
 };
 
 export type CostItem = {
@@ -13,6 +14,7 @@ export type CostItem = {
   shareBy: ShareBy[];
   paidBy: string;
   accordionExpended?: boolean;
+  equalSplit: string;
 };
 
 export interface CostItemsInitialState {
@@ -25,7 +27,18 @@ export type EditItemTypePayload = {
   isShared: boolean;
 };
 
+export type EditPortionPayload = {
+  itemIndex: number;
+  shareByIndex: number;
+  portion: number;
+};
+
 export type EditItemExpendedTypePayload = {
   itemIndex: number;
   expanded: boolean;
+};
+
+export type EditItemEqualSplitPayload = {
+  itemIndex: number;
+  equalSplit: string;
 };
