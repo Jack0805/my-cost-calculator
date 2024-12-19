@@ -16,6 +16,29 @@ import uniqid from "uniqid";
 export const FaqPage: React.FC = () => {
   return (
     <FaqPageWrapper>
+      <Helmet>
+        <title>Bill Split: Frequently Asked Questions</title>
+        <meta
+          name="description"
+          content="Find answers to your questions about splitting bills, sharing expenses, and using the Bill Split app effectively."
+        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "FAQ",
+            url: "https://billsplit.io/faq",
+            description:
+              "Frequently asked questions about Bill Split. Learn how to share expenses, split bills, and manage group costs efficiently.",
+          })}
+        </script>
+        <meta
+          name="keywords"
+          content="FAQ, bill splitting, shared expenses, group costs, split bills"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://billsplit.io/faq" />
+      </Helmet>
       <SiteHeader />
       <Typography variant="h5" gutterBottom>
         Frequent Asking Questions
