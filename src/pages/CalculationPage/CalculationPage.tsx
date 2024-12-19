@@ -9,6 +9,8 @@ import {
   convertDebts,
   groupItemsByPaidBy,
   BillsSummary,
+  simplifySettlement,
+  transformToResults,
 } from "../../utils/helpers";
 import { CustomizedSteppers } from "../../components";
 
@@ -40,6 +42,10 @@ import html2canvas from "html2canvas";
 
 import { trackEvent } from "../../utils/analytics";
 import { persistor } from "../../store/store";
+
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 function createData(
   name: string,
@@ -134,12 +140,18 @@ export const CalculationPage: React.FC = () => {
     calculateDetailedDebts(filterSharedItems(items)),
     names
   );
+  const simpleResult = simplifySettlement(transformToResults(result));
+  const [isSimplestSettlement, setIsSimplestSettlement] = useState(false);
 
   const rows = result.map((item) =>
     createData(item.name, item.owes, groupItemsByPaidBy(items, names))
   );
 
   const [open, setOpen] = useState(false);
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSimplestSettlement(event.target.checked);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -276,44 +288,69 @@ export const CalculationPage: React.FC = () => {
         }}
         elevation={3}
       >
-        <Typography variant="overline" gutterBottom sx={{ display: "block" }}>
+        <Typography variant="overline" sx={{ display: "block" }}>
           Step 3. Payer owes each person the amounts listed
         </Typography>
-        <TableContainer
-          component={Paper}
-          sx={{
-            "& > :not(style)": { m: 1 },
-            overflow: "auto",
-          }}
-          ref={tableRef}
-        >
-          <Table aria-label="collapsible table" stickyHeader>
-            <TableHead>
-              <TableRow sx={{ height: "10px", width: "33%" }}>
-                <TableCell padding="none" align="center" sx={{ width: "45%" }}>
-                  Payer
-                </TableCell>
-                {names.map((name) => {
-                  return (
-                    <TableCell
-                      padding="none"
-                      key={uniqid()}
-                      sx={{ minWidth: "33%" }}
-                      align="center"
-                    >
-                      {name}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <Row key={uniqid()} row={row} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isSimplestSettlement}
+                onChange={handleSwitchChange}
+              />
+            }
+            label="Show simplest settlement way"
+          />
+        </FormGroup>
+        {isSimplestSettlement ? (
+          <div>
+            {simpleResult.map((result) => (
+              <Typography variant="h6" key={uniqid()} gutterBottom>
+                {`${result.from} pays ${result.to} $${result.amount}`}
+              </Typography>
+            ))}
+          </div>
+        ) : (
+          <TableContainer
+            component={Paper}
+            sx={{
+              "& > :not(style)": { m: 1 },
+              overflow: "auto",
+            }}
+            ref={tableRef}
+          >
+            <Table aria-label="collapsible table" stickyHeader>
+              <TableHead>
+                <TableRow sx={{ height: "10px", width: "33%" }}>
+                  <TableCell
+                    padding="none"
+                    align="center"
+                    sx={{ width: "45%" }}
+                  >
+                    Payer
+                  </TableCell>
+                  {names.map((name) => {
+                    return (
+                      <TableCell
+                        padding="none"
+                        key={uniqid()}
+                        sx={{ minWidth: "33%" }}
+                        align="center"
+                      >
+                        {name}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row key={uniqid()} row={row} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Paper>
       <ButtonGroupWrapper>
         <Button

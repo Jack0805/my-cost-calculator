@@ -197,6 +197,100 @@ function groupItemsByPaidBy(items: CostItem[], people: string[]): BillsSummary {
   return result;
 }
 
+const roundToTwoDecimals = (value: number) => Math.round(value * 100) / 100;
+
+interface Settlement {
+  from: string;
+  to: string;
+  amount: number;
+}
+
+const simplifySettlement = (
+  results: Record<string, Record<string, number>>
+): Settlement[] => {
+  const balances: Record<string, number> = {};
+
+  // Calculate net balance for each participant
+  Object.entries(results).forEach(([from, owes]) => {
+    Object.entries(owes).forEach(([to, amount]) => {
+      const roundedAmount = roundToTwoDecimals(amount);
+
+      // Subtract from the payer's balance
+      balances[from] = (balances[from] || 0) - roundedAmount;
+
+      // Add to the recipient's balance
+      balances[to] = (balances[to] || 0) + roundedAmount;
+    });
+  });
+
+  const creditors: { name: string; amount: number }[] = [];
+  const debtors: { name: string; amount: number }[] = [];
+
+  // Separate participants into creditors and debtors
+  Object.entries(balances).forEach(([name, balance]) => {
+    const roundedBalance = roundToTwoDecimals(balance);
+
+    if (roundedBalance > 0) {
+      creditors.push({ name, amount: roundedBalance });
+    } else if (roundedBalance < 0) {
+      debtors.push({ name, amount: -roundedBalance });
+    }
+  });
+
+  const settlements: Settlement[] = [];
+
+  // Match debtors to creditors
+  while (debtors.length > 0 && creditors.length > 0) {
+    const debtor = debtors[0];
+    const creditor = creditors[0];
+
+    const payment = Math.min(debtor.amount, creditor.amount);
+
+    settlements.push({
+      from: debtor.name,
+      to: creditor.name,
+      amount: roundToTwoDecimals(payment),
+    });
+
+    debtor.amount -= payment;
+    creditor.amount -= payment;
+
+    if (debtor.amount === 0) debtors.shift();
+    if (creditor.amount === 0) creditors.shift();
+  }
+
+  return settlements;
+};
+
+// Define types for participants and results
+type Participant = {
+  name: string;
+  owes: number[];
+};
+
+type Results = {
+  [key: string]: { [key: string]: number };
+};
+
+// Function to transform data into the desired format
+const transformToResults = (participants: Participant[]): Results => {
+  const names = participants.map((participant) => participant.name);
+
+  const results: Results = {};
+
+  participants.forEach((participant) => {
+    const owedTo: { [key: string]: number } = {};
+    participant.owes.forEach((amount, index) => {
+      if (names[index] !== participant.name) {
+        owedTo[names[index]] = amount;
+      }
+    });
+    results[participant.name] = owedTo;
+  });
+
+  return results;
+};
+
 export {
   stringToColor,
   stringAvatar,
@@ -207,14 +301,8 @@ export {
   filterSharedItems,
   convertDebts,
   groupItemsByPaidBy,
+  simplifySettlement,
+  transformToResults,
 };
 
 export type { BillsSummary };
-
-// const participants: Participant[] = [
-//   { name: "jack", paid: 100, sharesWith: ["jack", "mia"] },
-//   { name: "mia", paid: 230, sharesWith: ["jack", "mia", "boris"] },
-//   { name: "mia", paid: 10, sharesWith: ["mia", "boris"] },
-//   { name: "boris", paid: 20, sharesWith: ["mia", "boris"] },
-//   { name: "boris", paid: 9, sharesWith: ["jack", "mia", "boris"] },
-// ];
