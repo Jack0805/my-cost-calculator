@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Bill Split",
+  "name": "Bill Split - Simplify Expense Sharing",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1DA1F2",
+  "background_color": "#ffffff",
+  "description": "Bill Split helps you easily share expenses and split bills among friends, family, or colleagues. Simplify your group expense management today!"
 }
