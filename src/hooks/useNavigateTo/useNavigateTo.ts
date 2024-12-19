@@ -24,11 +24,16 @@ export const useNavigateTo = () => {
     navigate(-1);
   };
 
+  const navigateToFaqPage = () => {
+    navigate(ROUTE.FAQ);
+  };
+
   return {
     navigateToGroupMemberPage,
     navigateToLandingPage,
     navigateToCostItemsPage,
     navigateToCalculationPage,
     navigateBack,
+    navigateToFaqPage,
   };
 };

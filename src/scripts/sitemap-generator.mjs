@@ -12,6 +12,7 @@ const generateSitemap = async () => {
     { url: "/group-member", changefreq: "weekly", priority: 0.8 },
     { url: "/cost-items", changefreq: "weekly", priority: 0.8 },
     { url: "/calculation", changefreq: "weekly", priority: 0.8 },
+    { url: "/faq", changefreq: "weekly", priority: 0.8 },
   ];
 
   // Define images only for the root URL

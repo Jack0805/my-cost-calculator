@@ -1,0 +1,46 @@
+[
+  {
+    "question": "What is Bill Split and how can it help me?",
+    "answer": "Bill Split is an online tool designed to help you split bills and share expenses among friends, family, or colleagues. Whether you're on a trip, sharing household expenses, or dining out, our app ensures everyone pays their fair share."
+  },
+  {
+    "question": "How do I split bills evenly using Bill Split?",
+    "answer": "To split bills evenly, simply enter the total amount and add the participants. Bill Split automatically calculates equal shares for everyone, saving you time and effort."
+  },
+  {
+    "question": "Can I split bills unequally or by specific amounts?",
+    "answer": "Yes, Bill Split allows you to assign specific amounts or portions to participants for unequal bill splitting. Perfect for scenarios where expenses are not shared equally."
+  },
+  {
+    "question": "Is Bill Split free to use?",
+    "answer": "Absolutely! Bill Split is a free-to-use web application with no hidden fees or subscriptions required. Start splitting bills instantly."
+  },
+  {
+    "question": "Do I need to create an account to use Bill Split?",
+    "answer": "No, you don't need to sign up or create an account. Bill Split works without requiring login credentials, and all your data is stored locally on your device."
+  },
+  {
+    "question": "Can I share a bill split session with others?",
+    "answer": "Currently, the ability to share a bill split session with others is not available. However, we are exploring the development of this feature to enable seamless sharing and collaboration in future updates."
+  },
+  {
+    "question": "How is my data stored and is it secure?",
+    "answer": "Your data is stored locally in your browser's local storage, ensuring your privacy and security. No data is sent to external servers unless you use the session-sharing feature."
+  },
+  {
+    "question": "Does Bill Split support multiple currencies?",
+    "answer": "At the moment, Bill Split does not support multiple currencies. All calculations are unified in USD ($). We value user feedback and may consider adding multi-currency support in future updates."
+  },
+  {
+    "question": "How can I download a summary of the bill split?",
+    "answer": "You can download a detailed PDF of the bill split results. This is ideal for keeping a record or sharing the summary with participants."
+  },
+  {
+    "question": "Why is it important to use a bill splitting app?",
+    "answer": "A bill splitting app like Bill Split simplifies managing shared expenses, avoids calculation errors, and ensures fairness when splitting costs among participants."
+  },
+  {
+    "question": "How can I contact you and provide valuable feedback?",
+    "answer": "You can easily reach out to us by clicking the Contact button in the header. It will take you to our official account on X (formerly Twitter), where you can leave a message or share feedback under any of our posts. We value your input and look forward to hearing from you!"
+  }
+]

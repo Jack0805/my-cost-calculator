@@ -12,6 +12,7 @@ import {
   GroupMemberPage,
   CalculationPage,
   PageNotFound,
+  FaqPage,
 } from "./pages/"; // Your Home component
 import { ROUTE } from "./shared";
 import { initializeGA, trackPageView } from "./utils/analytics";
@@ -50,6 +51,7 @@ const AppRoutes: React.FC = () => {
       <Route path={ROUTE.COST_ITEMS} element={<CostItemsPage />} />
       <Route path={ROUTE.GROUP_MEMBER} element={<GroupMemberPage />} />
       <Route path={ROUTE.CALCULATION} element={<CalculationPage />} />
+      <Route path={ROUTE.FAQ} element={<FaqPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -9,7 +9,7 @@ export const SiteFooter: React.FC = () => {
     <SiteFooterWrapper>
       <footer>
         <FooterModal />
-        <Typography sx={{ fontSize: "0.75rem" }}>
+        <Typography sx={{ fontSize: "0.75rem", textAlign: "center" }}>
           Copyright © {currentYear} Bill Split. All Rights Reserved.
         </Typography>
       </footer>

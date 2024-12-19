@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 
 import { ButtonWrapper } from "./index";
+import { useNavigateTo } from "../../hooks/";
 
 // Define the types for modal content keys
 type ModalType = "privacy" | "terms";
@@ -298,6 +299,8 @@ export function FooterModal() {
   const [active, setActive] = React.useState<ModalType>("privacy");
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
 
+  const { navigateToFaqPage, navigateToLandingPage } = useNavigateTo();
+
   const handleClickOpenPrivacy = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);
     setActive("privacy");
@@ -327,6 +330,9 @@ export function FooterModal() {
   return (
     <React.Fragment>
       <ButtonWrapper>
+        <Button onClick={navigateToLandingPage} sx={{ fontSize: "0.65rem" }}>
+          Home
+        </Button>
         <Button
           onClick={handleClickOpenPrivacy("paper")}
           sx={{ fontSize: "0.65rem" }}
@@ -338,6 +344,9 @@ export function FooterModal() {
           sx={{ fontSize: "0.65rem" }}
         >
           Terms of Use
+        </Button>
+        <Button onClick={navigateToFaqPage} sx={{ fontSize: "0.65rem" }}>
+          FQA
         </Button>
       </ButtonWrapper>
       <Dialog
