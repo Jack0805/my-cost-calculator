@@ -346,7 +346,7 @@ export function FooterModal() {
           Terms of Use
         </Button>
         <Button onClick={navigateToFaqPage} sx={{ fontSize: "0.65rem" }}>
-          FQA
+          FAQ
         </Button>
       </ButtonWrapper>
       <Dialog
