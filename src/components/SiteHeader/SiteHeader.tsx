@@ -1,8 +1,9 @@
 import React from "react";
-import XIcon from "@mui/icons-material/X";
+// import Email from "@mui/icons-material/X";
 import { SiteHeaderWrapper } from "./index";
 import { Link } from "react-router-dom";
 import Chip from "@mui/material/Chip";
+import ContactMailOutlinedIcon from "@mui/icons-material/ContactMailOutlined";
 
 export const SiteHeader: React.FC = () => {
   return (
@@ -15,14 +16,10 @@ export const SiteHeader: React.FC = () => {
         />
       </Link>
       <Chip
-        icon={<XIcon color="primary" fontSize="small" />}
-        label="Contact"
+        icon={<ContactMailOutlinedIcon color="primary" fontSize="small" />}
+        label="Contact: bill.split.io@gmail.com"
         variant="outlined"
         component="a"
-        clickable
-        target="_blank" // Open link in a new tab
-        rel="noopener noreferrer" // For security
-        href="https://x.com/billsplit_io"
         style={{ marginRight: "10px", padding: "5px" }}
       />
     </SiteHeaderWrapper>
