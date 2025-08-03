@@ -19,6 +19,10 @@ export const FaqPage: React.FC = () => {
       <Helmet>
         <title>Bill Split: Frequently Asked Questions</title>
         <meta
+          name="google-adsense-account"
+          content="ca-pub-5022597811159483"
+        ></meta>
+        <meta
           name="description"
           content="Find answers to your questions about splitting bills, sharing expenses, and using the Bill Split app effectively."
         />

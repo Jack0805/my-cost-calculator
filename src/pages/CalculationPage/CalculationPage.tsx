@@ -254,6 +254,10 @@ export const CalculationPage: React.FC = () => {
       <Helmet>
         <title>Bill Split Results | Fair Expense Sharing</title>
         <meta
+          name="google-adsense-account"
+          content="ca-pub-5022597811159483"
+        ></meta>
+        <meta
           name="description"
           content="View the results of your group expense split. See who owes whom and how much with accurate calculations."
         />

@@ -83,6 +83,10 @@ export const LandingPage: React.FC = () => {
       <Helmet>
         <title>Bill Split: Split Bills Effortlessly</title>
         <meta
+          name="google-adsense-account"
+          content="ca-pub-5022597811159483"
+        ></meta>
+        <meta
           name="description"
           content="Simplify group expenses with Bill Split. Easily divide costs, track spending, and ensure fair sharing among friends and family."
         />

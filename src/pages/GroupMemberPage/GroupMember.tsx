@@ -92,6 +92,10 @@ export const GroupMemberPage: React.FC = () => {
       <Helmet>
         <title>Bill Split: Add Group Members</title>
         <meta
+          name="google-adsense-account"
+          content="ca-pub-5022597811159483"
+        ></meta>
+        <meta
           name="description"
           content="Add group members to start splitting expenses fairly. Create a group for your event, trip, or party effortlessly."
         />

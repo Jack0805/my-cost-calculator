@@ -217,6 +217,10 @@ export const CostItemsPage: React.FC = () => {
         <Helmet>
           <title>Bill Split: Add Costs and Expenses</title>
           <meta
+            name="google-adsense-account"
+            content="ca-pub-5022597811159483"
+          ></meta>
+          <meta
             name="description"
             content="Add shared costs and expenses for your group. Enter item details to calculate and split bills fairly among members."
           />
