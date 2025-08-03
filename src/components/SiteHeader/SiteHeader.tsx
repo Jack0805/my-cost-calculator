@@ -17,7 +17,7 @@ export const SiteHeader: React.FC = () => {
       </Link>
       <Chip
         icon={<ContactMailOutlinedIcon color="primary" fontSize="small" />}
-        label="Contact: bill.split.io@gmail.com"
+        label="bill.split.io@gmail.com"
         variant="outlined"
         component="a"
         style={{ marginRight: "10px", padding: "5px" }}
