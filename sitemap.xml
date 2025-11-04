@@ -41,32 +41,32 @@
     </image:image>
   </url>
   <url>
-    <loc>https://billsplit.io/about</loc>
+    <loc>https://billsplit.io/about/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://billsplit.io/blog</loc>
+    <loc>https://billsplit.io/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://billsplit.io/faq</loc>
+    <loc>https://billsplit.io/faq/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://billsplit.io/group-member</loc>
+    <loc>https://billsplit.io/group-member/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://billsplit.io/cost-items</loc>
+    <loc>https://billsplit.io/cost-items/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://billsplit.io/calculation</loc>
+    <loc>https://billsplit.io/calculation/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
