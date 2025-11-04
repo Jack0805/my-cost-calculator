@@ -2,6 +2,9 @@
 
 A free, client-side bill-splitting web application that helps groups fairly divide shared expenses. Calculate who owes whom with support for both equal and custom splits, and get the simplest settlement plan to minimize transactions.
 
+Current number of active users
+![Active users](https://raw.githubusercontent.com/Jack0805/my-cost-calculator/refs/heads/feat/US1-create-basic-ui/images/screenshots.png?raw=true)
+
 [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
 [![Material-UI](https://img.shields.io/badge/MUI-6.1.4-blue.svg)](https://mui.com/)
@@ -38,12 +41,14 @@ A free, client-side bill-splitting web application that helps groups fairly divi
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd my-cost-calculator
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -51,6 +56,7 @@ yarn install
 ```
 
 3. Start the development server:
+
 ```bash
 npm start
 # or
@@ -105,11 +111,13 @@ The core calculation logic in `src/utils/helpers.ts` includes:
 ### Available Scripts
 
 #### Development
+
 ```bash
 npm start                 # Start development server
 ```
 
 #### Testing
+
 ```bash
 npm test                  # Run tests in watch mode
 npm test -- --watchAll=false  # Run tests once
@@ -117,6 +125,7 @@ npm test -- --coverage    # Run tests with coverage report
 ```
 
 #### Building
+
 ```bash
 npm run build            # Create production build
 npm run build:static     # Build + prerender for SEO
@@ -124,6 +133,7 @@ npm run prerender        # Run static prerendering only
 ```
 
 #### Deployment
+
 ```bash
 npm run deploy           # Deploy to GitHub Pages
 ```
@@ -173,11 +183,13 @@ npm run build:static
 ```
 
 This command:
+
 1. Creates a production build
 2. Prerenders all routes using Puppeteer for better SEO
 3. Generates static HTML files for each route
 
 The prerendering process:
+
 - Starts a local server serving the build folder
 - Uses headless Chrome to visit each route
 - Captures the fully rendered HTML
@@ -194,6 +206,7 @@ npm run deploy
 ```
 
 This will:
+
 1. Run `build:static` to create optimized and prerendered build
 2. Deploy the `build/` folder to the `gh-pages` branch
 3. Make the site available at your GitHub Pages URL
@@ -214,7 +227,7 @@ You can deploy the `build/` folder to any static hosting service:
 Update the Measurement ID in `src/utils/analytics.ts`:
 
 ```typescript
-const MEASUREMENT_ID = 'G-YOUR-ID';
+const MEASUREMENT_ID = "G-YOUR-ID";
 ```
 
 ### Google AdSense
@@ -222,7 +235,7 @@ const MEASUREMENT_ID = 'G-YOUR-ID';
 Update the publisher ID in public/index.html:
 
 ```html
-<meta name="google-adsense-account" content="ca-pub-YOUR-ID">
+<meta name="google-adsense-account" content="ca-pub-YOUR-ID" />
 ```
 
 ### Homepage URL
