@@ -37,6 +37,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test": "react-scripts test",
     "prerender": "node scripts/prerender.js",
     "build:static": "yarn build && yarn prerender",
     "predeploy": "yarn build:static",
