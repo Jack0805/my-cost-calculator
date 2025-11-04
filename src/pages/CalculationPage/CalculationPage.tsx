@@ -141,7 +141,7 @@ export const CalculationPage: React.FC = () => {
     names
   );
   const simpleResult = simplifySettlement(transformToResults(result));
-  const [isSimplestSettlement, setIsSimplestSettlement] = useState(false);
+  const [isSimplestSettlement, setIsSimplestSettlement] = useState(true);
 
   const rows = result.map((item) =>
     createData(item.name, item.owes, groupItemsByPaidBy(items, names))
