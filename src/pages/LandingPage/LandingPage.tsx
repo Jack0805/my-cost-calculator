@@ -6,6 +6,10 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 import { SiteHeader, SiteFooter } from "../../components";
 import {
@@ -183,6 +187,245 @@ export const LandingPage: React.FC = () => {
           />
         </ImageWrapper>
       </LandingContentWrapper>
+
+      {/* SEO-friendly content section */}
+      <Container maxWidth="lg" sx={{ py: 6, bgcolor: "#f5f5f5" }}>
+        {/* How It Works Section */}
+        <Box sx={{ mb: 6 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            gutterBottom
+            align="center"
+            sx={{ mb: 4 }}
+          >
+            How It Works - Just 3 Simple Steps
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Paper elevation={2} sx={{ p: 3, height: "100%" }}>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  gutterBottom
+                  color="primary"
+                >
+                  1. Add Group Members
+                </Typography>
+                <Typography variant="body1">
+                  Start by adding all the people in your group who will be
+                  sharing expenses. Simply enter their names - no registration
+                  or login required.
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper elevation={2} sx={{ p: 3, height: "100%" }}>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  gutterBottom
+                  color="primary"
+                >
+                  2. Enter Expenses
+                </Typography>
+                <Typography variant="body1">
+                  Add each expense by specifying who paid, the amount, and how
+                  it should be split. You can split equally or customize
+                  portions for each person.
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper elevation={2} sx={{ p: 3, height: "100%" }}>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  gutterBottom
+                  color="primary"
+                >
+                  3. View Settlement Plan
+                </Typography>
+                <Typography variant="body1">
+                  Instantly see who owes whom and how much. Our smart algorithm
+                  minimizes the number of transactions needed to settle all
+                  debts fairly.
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Features Section */}
+        <Box sx={{ mb: 6, mt: 10 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            gutterBottom
+            align="center"
+            sx={{ mb: 4 }}
+          >
+            Why Choose BillSplit.io?
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: "flex", mb: 2 }}>
+                <Typography variant="h6" component="h3" sx={{ mr: 2 }}>
+                  ✓
+                </Typography>
+                <Box>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    100% Free Forever
+                  </Typography>
+                  <Typography variant="body2">
+                    No hidden fees, no premium features, no subscriptions.
+                    BillSplit.io is completely free to use with unlimited
+                    calculations.
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: "flex", mb: 2 }}>
+                <Typography variant="h6" component="h3" sx={{ mr: 2 }}>
+                  ✓
+                </Typography>
+                <Box>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    Smart Settlement Algorithm
+                  </Typography>
+                  <Typography variant="body2">
+                    Our intelligent algorithm calculates the minimum number of
+                    transactions needed to settle all debts, saving time and
+                    reducing confusion.
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: "flex", mb: 2 }}>
+                <Typography variant="h6" component="h3" sx={{ mr: 2 }}>
+                  ✓
+                </Typography>
+                <Box>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    Privacy First
+                  </Typography>
+                  <Typography variant="body2">
+                    All calculations happen in your browser. Your data is stored
+                    locally on your device and never sent to our servers.
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: "flex", mb: 2 }}>
+                <Typography variant="h6" component="h3" sx={{ mr: 2 }}>
+                  ✓
+                </Typography>
+                <Box>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    Export to PDF
+                  </Typography>
+                  <Typography variant="body2">
+                    Download your settlement results as a PDF for easy sharing
+                    with your group or for keeping records.
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Use Cases Section */}
+        <Box>
+          <Typography
+            variant="h4"
+            component="h2"
+            gutterBottom
+            align="center"
+            sx={{ mb: 4 }}
+          >
+            Perfect For Any Shared Expense
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper
+                elevation={1}
+                sx={{ p: 2, textAlign: "center", bgcolor: "white" }}
+              >
+                <Typography variant="h6" component="h3" gutterBottom>
+                  🍽️ Restaurant Bills
+                </Typography>
+                <Typography variant="body2">
+                  Split dinner costs fairly among friends
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper
+                elevation={1}
+                sx={{ p: 2, textAlign: "center", bgcolor: "white" }}
+              >
+                <Typography variant="h6" component="h3" gutterBottom>
+                  ✈️ Group Trips
+                </Typography>
+                <Typography variant="body2">
+                  Manage vacation expenses effortlessly
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper
+                elevation={1}
+                sx={{ p: 2, textAlign: "center", bgcolor: "white" }}
+              >
+                <Typography variant="h6" component="h3" gutterBottom>
+                  🏠 Roommate Expenses
+                </Typography>
+                <Typography variant="body2">
+                  Divide rent and household costs
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Paper
+                elevation={1}
+                sx={{ p: 2, textAlign: "center", bgcolor: "white" }}
+              >
+                <Typography variant="h6" component="h3" gutterBottom>
+                  🎉 Event Planning
+                </Typography>
+                <Typography variant="body2">
+                  Split party and event costs easily
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* CTA Section */}
+        <Box sx={{ mt: 6, textAlign: "center" }}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Ready to Split Bills the Smart Way?
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            Join thousands of users who trust BillSplit.io for fair and easy
+            expense sharing.
+          </Typography>
+          <Button
+            variant="contained"
+            size="large"
+            color="primary"
+            onClick={() =>
+              hasData ? handleClickOpen() : navigateToGroupMemberPage()
+            }
+          >
+            Start Splitting Now - It's Free!
+          </Button>
+        </Box>
+      </Container>
+
       <SiteFooter />
       <ResponsiveDialog
         title="Are You Sure You Want to Start a New Calculation?"
