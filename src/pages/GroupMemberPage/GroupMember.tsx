@@ -114,7 +114,7 @@ export const GroupMemberPage: React.FC = () => {
           content="add group members, group expenses, shared costs, event expenses"
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://billsplit.io/#/group-member" />
+        <link rel="canonical" href="https://billsplit.io/group-member/" />
       </Helmet>
       <SiteHeader />
       <CustomizedSteppers currentStep={0} />

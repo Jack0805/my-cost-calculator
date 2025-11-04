@@ -239,7 +239,7 @@ export const CostItemsPage: React.FC = () => {
             content="add expenses, split costs, shared bills, group expenses"
           />
           <meta name="robots" content="index, follow" />
-          <link rel="canonical" href="https://billsplit.io/#/cost-items" />
+          <link rel="canonical" href="https://billsplit.io/cost-items/" />
         </Helmet>
         <SiteHeader />
         <CustomizedSteppers currentStep={1} />

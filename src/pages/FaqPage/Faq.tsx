@@ -41,7 +41,7 @@ export const FaqPage: React.FC = () => {
           content="FAQ, bill splitting, shared expenses, group costs, split bills"
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://billsplit.io/faq" />
+        <link rel="canonical" href="https://billsplit.io/faq/" />
       </Helmet>
       <SiteHeader />
       <Typography variant="h5" gutterBottom>

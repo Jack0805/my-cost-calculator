@@ -162,6 +162,111 @@ export const CalculationPage: React.FC = () => {
   };
 
   const tableRef = useRef<HTMLDivElement>(null); // Use a type-safe ref for the table
+  const simpleResultRef = useRef<HTMLDivElement>(null); // Ref for simple settlement view
+
+  const generateSimplePDF = async () => {
+    if (!simpleResultRef.current) return;
+
+    try {
+      const canvas = await html2canvas(simpleResultRef.current, {
+        scrollY: -window.scrollY,
+        scrollX: -window.scrollX,
+        scale: 2,
+        backgroundColor: '#ffffff',
+      });
+
+      const pdf = new jsPDF('portrait');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      const widthRatio = pdfWidth / imgWidth;
+      const heightRatio = (pdfHeight - 40) / imgHeight; // Reserve space for title
+      const ratio = Math.min(widthRatio, heightRatio);
+
+      const scaledWidth = imgWidth * ratio;
+      const scaledHeight = imgHeight * ratio;
+
+      const xOffset = (pdfWidth - scaledWidth) / 2;
+      const yOffset = 48;
+
+      // Add website branding at the top
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.setTextColor(25, 118, 210); // Material-UI primary blue color
+      pdf.text("BillSplit.io", pdfWidth / 2, 12, { align: "center" });
+
+      // Add tagline
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+      pdf.setTextColor(80, 80, 80);
+      pdf.text("Split Bills Effortlessly - 100% Free Forever", pdfWidth / 2, 18, { align: "center" });
+
+      // Add clickable link
+      pdf.setTextColor(100, 100, 100);
+      pdf.setFontSize(9);
+      pdf.text("https://billsplit.io", pdfWidth / 2, 24, { align: "center" });
+      pdf.link(pdfWidth / 2 - 20, 21, 40, 4, { url: "https://billsplit.io" });
+
+      // Add separator line
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setLineWidth(0.5);
+      pdf.line(20, 28, pdfWidth - 20, 28);
+
+      // Add a title with the date
+      const now = new Date();
+      const resultDate = now.toLocaleDateString();
+      const resultTime = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      pdf.setTextColor(0, 0, 0); // Reset to black
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(14);
+      pdf.text(`Bill Splitting Results`, pdfWidth / 2, 35, { align: "center" });
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      pdf.text(`${resultDate} ${resultTime}`, pdfWidth / 2, 40, { align: "center" });
+
+      // Add explanatory text under the title
+      const explanation = "Simplified Settlement Plan - Minimum transactions needed";
+      pdf.setFont("helvetica", "italic");
+      pdf.setFontSize(10);
+      pdf.setTextColor(60, 60, 60);
+      pdf.text(explanation, pdfWidth / 2, 45, { align: "center" });
+
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        xOffset,
+        yOffset,
+        scaledWidth,
+        scaledHeight
+      );
+
+      const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
+      const fileName = `bill-split-simple-${timestamp}.pdf`;
+
+      const blob = pdf.output("blob");
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
+
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+
+      const pdfDetails = {
+        file_name: fileName,
+        type: 'simple_settlement',
+        results: JSON.stringify(simpleResult),
+      };
+      trackEvent("click", "Button", "Download Simple PDF Done", 1, pdfDetails);
+    } catch (error) {
+      trackEvent("click", "Button", `Error generating simple PDF: ${error}`);
+      console.error("Error generating simple PDF:", error);
+    }
+  };
 
   const generatePDF = async () => {
     if (!tableRef.current) return;
@@ -199,7 +304,30 @@ export const CalculationPage: React.FC = () => {
       const scaledHeight = imgHeight * ratio;
 
       const xOffset = 0;
-      const yOffset = 20;
+      const yOffset = 35; // Increased from 30 to 35 for more spacing
+
+      // Add website branding at the top
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.setTextColor(25, 118, 210); // Material-UI primary blue color
+      pdf.text("BillSplit.io", pdfWidth / 2, 8, { align: "center" });
+
+      // Add tagline
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+      pdf.setTextColor(80, 80, 80);
+      pdf.text("Split Bills Effortlessly - 100% Free Forever", pdfWidth / 2, 13, { align: "center" });
+
+      // Add clickable link
+      pdf.setTextColor(100, 100, 100);
+      pdf.setFontSize(9);
+      pdf.text("https://billsplit.io", pdfWidth / 2, 18, { align: "center" });
+      pdf.link(pdfWidth / 2 - 20, 15, 40, 4, { url: "https://billsplit.io" });
+
+      // Add separator line
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setLineWidth(0.5);
+      pdf.line(20, 21, pdfWidth - 20, 21);
 
       // Add a title with the date
       const now = new Date();
@@ -208,17 +336,22 @@ export const CalculationPage: React.FC = () => {
         hour: "2-digit",
         minute: "2-digit",
       }); // Time in HH:mm format
-      const title = `Bill Splitting Results - ${resultDate} ${resultTime}`;
+      pdf.setTextColor(0, 0, 0); // Reset to black
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(16);
-      pdf.text(title, pdfWidth / 2, 10, { align: "center" }); // Center the title
+      pdf.setFontSize(14);
+      pdf.text(`Bill Splitting Results`, pdfWidth / 2, 26, { align: "center" }); // Center the title
 
-      // Add explanatory text under the title
-      const explanation =
-        "This table shows the payment breakdown. Each row represents a payer and the amounts owed to others.";
+      // Add date and time
       pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(12);
-      pdf.text(explanation, pdfWidth / 2, 16, { align: "center" }); // Center the explanation below the title
+      pdf.setFontSize(9);
+      pdf.text(`${resultDate} ${resultTime}`, pdfWidth / 2 + 50, 26, { align: "left" });
+
+      // Add explanatory text under the title (make it shorter for landscape) - with more spacing
+      const explanation = "Detailed breakdown: Each row shows a payer and the amounts owed to others.";
+      pdf.setFont("helvetica", "italic");
+      pdf.setFontSize(9);
+      pdf.setTextColor(60, 60, 60);
+      pdf.text(explanation, pdfWidth / 2, 32, { align: "center" }); // Moved from 29 to 32 for more spacing between title and explanation
 
       pdf.addImage(
         canvas.toDataURL("image/png"),
@@ -276,7 +409,7 @@ export const CalculationPage: React.FC = () => {
           content="bill split results, shared expenses, group costs, expense calculations"
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://billsplit.io/#/calculation" />
+        <link rel="canonical" href="https://billsplit.io/calculation/" />
       </Helmet>
       <SiteHeader />
       <CustomizedSteppers currentStep={2} />
@@ -307,10 +440,19 @@ export const CalculationPage: React.FC = () => {
           />
         </FormGroup>
         {isSimplestSettlement ? (
-          <div>
-            {simpleResult.map((result) => (
-              <Typography variant="h6" key={uniqid()} gutterBottom>
-                {`${result.from} pays ${result.to} $${result.amount}`}
+          <div ref={simpleResultRef} style={{ padding: '20px' }}>
+            {simpleResult.map((result, index) => (
+              <Typography
+                variant="body2"
+                key={uniqid()}
+                gutterBottom
+                sx={{
+                  fontSize: '14px',
+                  mb: 1.2,
+                  lineHeight: 1.6
+                }}
+              >
+                {`${index + 1}. ${result.from} pays ${result.to} $${result.amount}`}
               </Typography>
             ))}
           </div>
@@ -329,7 +471,7 @@ export const CalculationPage: React.FC = () => {
                   <TableCell
                     padding="none"
                     align="center"
-                    sx={{ width: "45%" }}
+                    sx={{ width: "120px", minWidth: "100px", maxWidth: "150px" }}
                   >
                     Payer
                   </TableCell>
@@ -338,7 +480,7 @@ export const CalculationPage: React.FC = () => {
                       <TableCell
                         padding="none"
                         key={uniqid()}
-                        sx={{ minWidth: "33%" }}
+                        sx={{ minWidth: "80px" }}
                         align="center"
                       >
                         {name}
@@ -378,8 +520,8 @@ export const CalculationPage: React.FC = () => {
             marginTop: "20px",
           }}
           autoFocus
-          onClick={generatePDF}
-          aria-label="Start Splitting Bills"
+          onClick={isSimplestSettlement ? generateSimplePDF : generatePDF}
+          aria-label="Download PDF"
         >
           Download PDF
         </Button>

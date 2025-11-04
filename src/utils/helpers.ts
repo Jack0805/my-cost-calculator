@@ -1,5 +1,5 @@
-import { Height } from "@mui/icons-material";
 import { CostItem } from "../store/types";
+
 function stringToColor(string: string) {
   let hash = 0;
   let i;

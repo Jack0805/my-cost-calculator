@@ -29,11 +29,8 @@ const AppRoutes: React.FC = () => {
   }, [location, navigate]);
 
   useEffect(() => {
-    // Initialize Google Analytics when the app loads
+    // Initialize Google Analytics only once when the app loads
     initializeGA();
-
-    // Track the initial page view
-    trackPageView(location.pathname + location.search);
   }, []);
 
   useEffect(() => {
@@ -50,7 +47,7 @@ const AppRoutes: React.FC = () => {
       <Route path={ROUTE.FAQ} element={<FaqPage />} />
       <Route path={ROUTE.ABOUT} element={<AboutPage />} />
       <Route path={ROUTE.BLOG} element={<BlogPage />} />
-      {/* <Route path="*" element={<PageNotFound />} /> */}
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

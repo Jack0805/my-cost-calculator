@@ -17,7 +17,7 @@ export const AboutPage = () => {
           name="keywords"
           content="about billsplit, bill splitting tool, expense sharing, split bills, group expenses"
         />
-        <link rel="canonical" href="https://billsplit.io/about" />
+        <link rel="canonical" href="https://billsplit.io/about/" />
       </Helmet>
 
       <SiteHeader />

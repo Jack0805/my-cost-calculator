@@ -142,7 +142,7 @@ This mathematical approach ensures you make the fewest possible transactions whi
           name="keywords"
           content="bill splitting tips, expense sharing guide, group finances, roommate expenses, trip budgeting"
         />
-        <link rel="canonical" href="https://billsplit.io/blog" />
+        <link rel="canonical" href="https://billsplit.io/blog/" />
       </Helmet>
 
       <SiteHeader />
