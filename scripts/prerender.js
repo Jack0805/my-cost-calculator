@@ -5,7 +5,7 @@ const http = require("http");
 const finalhandler = require("finalhandler");
 const serveStatic = require("serve-static");
 
-const routes = ["/", "/cost-items", "/group-member", "/calculation", "/faq"];
+const routes = ["/", "/cost-items", "/group-member", "/calculation", "/faq", "/about", "/blog"];
 const buildDir = path.join(__dirname, "../build");
 const outputDir = path.join(__dirname, "../prerendered");
 

@@ -4,4 +4,6 @@ export enum ROUTE {
   GROUP_MEMBER = "/group-member",
   CALCULATION = "/calculation",
   FAQ = "/faq",
+  ABOUT = "/about",
+  BLOG = "/blog",
 }

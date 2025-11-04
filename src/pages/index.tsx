@@ -4,3 +4,5 @@ export * from "./GroupMemberPage";
 export * from "./CalculationPage";
 export * from "./PageNotFound";
 export * from "./FaqPage";
+export * from "./AboutPage";
+export * from "./BlogPage";

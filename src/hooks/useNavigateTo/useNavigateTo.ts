@@ -20,6 +20,14 @@ export const useNavigateTo = () => {
     navigate(ROUTE.CALCULATION);
   };
 
+  const navigateToAbout = () => {
+    navigate(ROUTE.ABOUT);
+  };
+
+  const navigateToBlog = () => {
+    navigate(ROUTE.BLOG);
+  };
+
   const navigateBack = () => {
     navigate(-1);
   };
@@ -35,5 +43,7 @@ export const useNavigateTo = () => {
     navigateToCalculationPage,
     navigateBack,
     navigateToFaqPage,
+    navigateToAbout,
+    navigateToBlog,
   };
 };

@@ -299,7 +299,12 @@ export function FooterModal() {
   const [active, setActive] = React.useState<ModalType>("privacy");
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
 
-  const { navigateToFaqPage, navigateToLandingPage } = useNavigateTo();
+  const {
+    navigateToFaqPage,
+    navigateToLandingPage,
+    navigateToAbout,
+    navigateToBlog,
+  } = useNavigateTo();
 
   const handleClickOpenPrivacy = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);
@@ -333,6 +338,12 @@ export function FooterModal() {
         <Button onClick={navigateToLandingPage} sx={{ fontSize: "0.65rem" }}>
           Home
         </Button>
+        <Button onClick={navigateToAbout} sx={{ fontSize: "0.65rem" }}>
+          About
+        </Button>
+        <Button onClick={navigateToBlog} sx={{ fontSize: "0.65rem" }}>
+          Blog
+        </Button>
         <Button
           onClick={handleClickOpenPrivacy("paper")}
           sx={{ fontSize: "0.65rem" }}
@@ -343,7 +354,7 @@ export function FooterModal() {
           onClick={handleClickOpenTerms("paper")}
           sx={{ fontSize: "0.65rem" }}
         >
-          Terms of Use
+          ToU
         </Button>
         <Button onClick={navigateToFaqPage} sx={{ fontSize: "0.65rem" }}>
           FAQ
