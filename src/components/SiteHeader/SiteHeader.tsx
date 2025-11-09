@@ -14,10 +14,13 @@ export const SiteHeader: React.FC = () => {
         />
       </Link>
       <Chip
-        label="bill.split.io@gmail.com"
+        label="Instant PDF invoice generator"
         variant="outlined"
         component="a"
-        style={{ marginRight: "10px", padding: "5px" }}
+        href="https://invoice4u.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ marginRight: "10px", padding: "5px", cursor: "pointer" }}
       />
     </SiteHeaderWrapper>
   );
